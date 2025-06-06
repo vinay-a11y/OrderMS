@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SnackMart - Fresh Chewda, Laddu & More</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/index.css">
+</head>
+
+<body>
+    <!-- Pincode Selection Modal -->
+    <div class="pincode-modal" id="pincodeModal">
+        <div class="pincode-modal-content">
+            <button class="modal-close" onclick="closePincodeModal()">&times;</button>
+            <h2 class="modal-title">Where should we deliver?</h2>
+            
+            <div class="pincode-search">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="Search for pincode, area or street name." id="pincodeInput">
+            </div>
+            
+            <div class="recent-searches">
+                <h4>Available Pincodes</h4>
+                <div id="pincodesList">
+                    <!-- Pincodes will be loaded here from backend -->
+                    <div class="loading-pincodes">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Loading available pincodes...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Section -->
+    <header class="header" id="header">
+        <div class="top-header">
+            <!-- Location Selector -->
+            <div class="location-selector" onclick="openPincodeModal()">
+                <i class="fas fa-map-marker-alt"></i>
+                <span class="pincode" id="selectedPincode">Select</span>
+                <i class="fas fa-chevron-down"></i>
+                <span class="location-name" id="selectedLocation">Pincode</span>
+            </div>
+
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <span class="logo-icon">🍪</span>
+                <span class="logo-text">SnackMart</span>
+            </a>
+
+            <!-- Delivery Info -->
+            <div class="delivery-info">
+                <span class="delivery-label">Home Delivery Available</span>
+                <span class="delivery-time">8:00 AM - 10:00 PM</span>
+            </div>
+
+            <!-- Search Container -->
+            <div class="search-container">
+                <input type="text" placeholder="Search for snacks..." class="search-input">
+                <button class="search-button">SEARCH</button>
+            </div>
+
+            <!-- Products Link -->
+            <a href="/product" class="products-link">
+                <i class="fas fa-th-large"></i>
+                <span>All Products</span>
+            </a>
+
+            <!-- User Actions -->
+            <div class="user-actions">
+                <!-- Auth Container -->
+                <div class="auth-container">
+                    <a href="#" class="sign-in" id="authButton" onclick="toggleAuth()">
+                        <i class="fas fa-user"></i>
+                        <span id="authText">Sign In / Register</span>
+                    </a>
+                    
+                    <!-- Logout Dropdown -->
+                    <div class="logout-dropdown" id="logoutDropdown">
+                        <p style="margin-bottom: 1rem; color: #666; font-size: 0.9rem;">Are you sure you want to logout?</p>
+                        <button class="logout-btn" onclick="confirmLogout()">Yes, Logout</button>
+                        <button class="cancel-btn" onclick="cancelLogout()">Cancel</button>
+                    </div> 
+                </div>
+
+                <!-- Cart Section -->
+                <div class="cart-section">
+                    <div class="cart-icon" id="cartIcon">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Cart Popup -->
+    <div class="cart-popup" id="cartPopup">
+        <div class="cart-popup-header">
+            <h3>My cart <span id="cartItemCount">0</span> items</h3>
+            <div class="cart-summary">
+                <div class="cart-savings">
+                    Savings
+                    <span id="cartSavings">₹0</span>
+                </div>
+                <div class="cart-total-summary">
+                    Cart Total
+                    <span id="cartTotal">₹0</span>
+                </div>
+            </div>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be dynamically loaded here -->
+            <div style="text-align: center; padding: 3rem;">
+                <i class="fas fa-shopping-cart" style="font-size: 4rem; color: #ddd; margin-bottom: 1rem;"></i>
+                <p style="color: #666; font-size: 1.1rem;">Your cart is empty</p>
+            </div>
+        </div>
+
+        <div class="cart-footer">
+            <div class="minimum-order">
+                Minimum Order Amount is ₹500
+            </div>
+<button class="view-cart-btn" id="viewFullCart" >VIEW FULL CART</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Fresh & Delicious Snacks</h1>
+            <p>Discover our premium collection of traditional chewda, sweet laddu, and authentic Indian snacks made with love and finest ingredients</p>
+            <a href="/products" class="cta-button">Shop Now <i class="fas fa-arrow-right"></i></a>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <h2 class="section-title">Our Categories</h2>
+            <div class="categories-grid">
+                <div class="category-card" onclick="filterProducts('chewda')">
+                    <div class="category-icon">🥨</div>
+                    <h3>Chewda & Mixtures</h3>
+                    <p>Crispy and flavorful traditional mixtures made with premium ingredients and authentic spices</p>
+                </div>
+                <div class="category-card" onclick="filterProducts('laddu')">
+                    <div class="category-icon">🍯</div>
+                    <h3>Sweet Laddu</h3>
+                    <p>Traditional handmade laddus with pure ghee, dry fruits, and natural sweeteners</p>
+                </div>
+                <div class="category-card" onclick="filterProducts('namkeen')">
+                    <div class="category-icon">🌶️</div>
+                    <h3>Namkeen</h3>
+                    <p>Spicy and tangy savory snacks perfect for tea time and celebrations</p>
+                </div>
+                <div class="category-card" onclick="filterProducts('sweets')">
+                    <div class="category-icon">🍬</div>
+                    <h3>Traditional Sweets</h3>
+                    <p>Authentic Indian sweets made with traditional recipes and finest ingredients</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured-products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div id="featuredProductsContainer" class="product-grid" >
+                <div class="loading">Loading products...</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="/">Home</a>
+                    <a href="/products">Products</a>
+                    <a href="#categories">Categories</a>
+                    <a href="#contact">Contact</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Categories</h3>
+                    <a href="products.html?category=chewda">Chewda</a>
+                    <a href="products.html?category=laddu">Laddu</a>
+                    <a href="products.html?category=namkeen">Namkeen</a>
+                    <a href="products.html?category=sweets">Sweets</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Customer Service</h3>
+                    <a href="#help">Help Center</a>
+                    <a href="#shipping">Shipping Info</a>
+                    <a href="#returns">Returns</a>
+                    <a href="#faq">FAQ</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Connect With Us</h3>
+                    <div class="social-icons">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div style="border-top: 1px solid #555; padding-top: 1rem; margin-top: 2rem;">
+                <p>&copy; 2024 SnackMart. All rights reserved. Made with ❤️ for snack lovers</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button class="scroll-top" id="scrollTop" onclick="scrollToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="static/js/common.js"></script>
+    <script src="static/js/index.js"></script>
+    <script src="static/js/navbar.js"></script>
+</body>
+</html>

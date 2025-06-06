@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details - SnackMart</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/product-details.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Location Selector -->
+            <div class="location-selector" onclick="openLocationModal()">
+                <i class="fas fa-map-marker-alt"></i>
+                <div class="location-text">
+                    <span class="pincode">110001</span>
+                    <span class="location-name">New Delhi</span>
+                </div>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <div class="logo-icon">🍪</div>
+                <div class="logo-text">
+                    <span class="brand-name">SnackMart</span>
+                    <span class="brand-tagline">Premium Snacks</span>
+                </div>
+            </a>
+
+            <!-- Search Bar -->
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" placeholder="Search for delicious snacks..." class="search-input" id="searchInput">
+                    <button class="search-button" onclick="performSearch()">
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- User Actions -->
+            <div class="user-actions">
+                <a href="#" class="auth-link">
+                    <i class="fas fa-user"></i>
+                    <span>Sign In</span>
+                </a>
+                
+                <div class="cart-container" onclick="toggleCart()">
+                    <div class="cart-icon">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+        <div class="breadcrumb-container">
+            <ul class="breadcrumb-list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/products">Products</a></li>
+                <li><span id="breadcrumbProduct">Product Details</span></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Product Details -->
+            <section class="product-section">
+                <div class="product-container" id="productContainer">
+                    <!-- Loading State -->
+                    <div class="loading-state">
+                        <div class="loading-spinner"></div>
+                        <p>Loading product details...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Related Products -->
+            <section class="related-section">
+                <h2 class="section-title">You May Also Like</h2>
+                <div class="related-grid" id="relatedGrid">
+                    <!-- Related products will be loaded here -->
+                    <div class="loading-state">
+                        <div class="loading-spinner"></div>
+                        <p>Loading related products...</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>
+                <i class="fas fa-shopping-bag"></i>
+                Shopping Cart
+                <span class="cart-badge" id="cartBadge">0</span>
+            </h3>
+            <button class="cart-close" onclick="toggleCart()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <div class="cart-content" id="cartContent">
+            <div class="empty-cart">
+                <div class="empty-icon">🛒</div>
+                <h4>Your cart is empty</h4>
+                <p>Add some delicious snacks to get started!</p>
+            </div>
+        </div>
+        
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total: ₹<span id="cartTotal">0</span></span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn" onclick="window.location.href='/cart'">
+                <i class="fas fa-credit-card"></i>
+                Checkout
+            </button>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <div class="toast-content">
+            <i class="toast-icon fas fa-check-circle"></i>
+            <span class="toast-message">Item added to cart!</span>
+        </div>
+        <button class="toast-close" onclick="hideToast()">
+            <i class="fas fa-times"></i>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>SnackMart</h3>
+                <p>Your trusted partner for premium quality snacks delivered fresh to your doorstep.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/products">Products</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Customer Service</h4>
+                <ul>
+                    <li><a href="/help">Help Center</a></li>
+                    <li><a href="/shipping">Shipping Info</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/track">Track Order</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact Info</h4>
+                <div class="contact-info">
+                    <p><i class="fas fa-phone"></i> +91 98765 43210</p>
+                    <p><i class="fas fa-envelope"></i> info@snackmart.com</p>
+                    <p><i class="fas fa-clock"></i> 8:00 AM - 10:00 PM</p>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SnackMart. All rights reserved. Made with ❤️ for snack lovers</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/product-details.js"></script>
+</body>
+</html>
