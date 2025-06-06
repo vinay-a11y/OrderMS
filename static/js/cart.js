@@ -216,7 +216,7 @@ async function removeFromCart(productId) {
 updateCartCount()
 
 // Proceed to checkout
-function proceedToCheckout() {
+async function proceedToCheckout() {
   if (cart.length === 0) {
     const toast = document.createElement("div")
     toast.className = "toast error"
@@ -229,17 +229,83 @@ function proceedToCheckout() {
     return
   }
 
-  // Show loading toast
-  const toast = document.createElement("div")
-  toast.className = "toast success"
-  toast.innerHTML = `
-        <i class="fas fa-spinner fa-spin"></i>
-        Redirecting to checkout...
-    `
-  document.body.appendChild(toast)
+  // 🧮 Calculate total amount in INR (you may change this logic)
+  const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
-  // Simulate redirect delay
-  setTimeout(() => {
-    window.location.href = "/checkout"
-  }, 1500)
+  try {
+    // 📡 Call your FastAPI backend to create Razorpay order
+    const res = await fetch("http://localhost:8000/create-order/", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ amount: totalAmount }) // in INR
+    })
+
+    const data = await res.json()
+
+    if (!res.ok || !data.order_id) {
+      throw new Error(data.detail || "Failed to initiate payment")
+    }
+
+    // 💳 Razorpay options
+    const options = {
+      key: data.key, // Razorpay test key from backend
+      amount: totalAmount * 100, // in paise
+      currency: "INR",
+      name: "Demo Shop",
+      description: "Purchase Items",
+      order_id: data.order_id,
+      handler: async function (response) {
+        // ✅ Verify payment on server
+        const verifyRes = await fetch("http://localhost:8000/verify-payment/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            order_id: response.razorpay_order_id,
+            payment_id: response.razorpay_payment_id,
+            signature: response.razorpay_signature
+          })
+        })
+
+        const verifyResult = await verifyRes.json()
+
+        if (verifyRes.ok && verifyResult.status === "success") {
+          alert("Payment successful and verified!")
+          cart = [] // Clear cart or update UI accordingly
+        } else {
+          alert("Payment verification failed.")
+        }
+      },
+      prefill: {
+        name: "John Doe",
+        email: "johndoe@example.com",
+        contact: "9999999999"
+      },
+      theme: {
+        color: "#528FF0"
+      }
+    }
+
+    const rzp = new Razorpay(options)
+    rzp.open()
+  } catch (error) {
+    console.error("Checkout error:", error)
+    alert("Error during checkout: " + error.message)
+  }
+  // Show loading toast
+  // const toast = document.createElement("div")
+  // toast.className = "toast success"
+  // toast.innerHTML = `
+  //       <i class="fas fa-spinner fa-spin"></i>
+  //       Redirecting to checkout...
+  //   `
+  // document.body.appendChild(toast)
+
+  // // Simulate redirect delay
+  // setTimeout(() => {
+  //   window.location.href = "/checkout"
+  // }, 1500)
 }
+
+
+  
+
