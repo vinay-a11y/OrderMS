@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from uuid import uuid4
 from app.models.user import User
 from app.database.session import get_db
+from app.schemas.user import ResetPasswordRequest
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -68,10 +69,7 @@ def login(
         response = JSONResponse(content={
             "message": "Login successful",
             "user": {
-                "first_name": user.first_name,
-                # "last_name": user.last_name,
-                # "mobile_number": user.mobile_number,
-                # "customer_id": user.customer_id
+                "first_name": user.first_name
             }
         })
         response.set_cookie(key="logged_in", value="true", httponly=True)
@@ -86,4 +84,27 @@ def logout():
     response.delete_cookie(key="logged_in")
     return response
 
+# @router.post("/reset-password")
+# def reset_password(
+#     phone: str = Form(...),
+#     password: str = Form(...),
+#     db: Session = Depends(get_db)
+# ):
+#     user = db.query(User).filter(User.mobile_number == phone).first()
+#     if user:
+#         user.password = password
+#         db.add(user)
+#         db.commit()
+#         return JSONResponse(content={"message": "Password reset successful"})
+#     return JSONResponse(content={"detail": "Invalid credentials"}, status_code=401)
 
+@router.post("/reset-password")
+def reset_password(req: ResetPasswordRequest, db: Session = Depends(get_db)):
+    print(req)
+    user = db.query(User).filter(User.mobile_number == req.phone).first()
+    if user:
+        user.password = req.newPassword
+        db.add(user)
+        db.commit()
+        return JSONResponse(content={"message": "Password reset successful"})
+    return JSONResponse(content={"detail": "Invalid credentials"}, status_code=401)

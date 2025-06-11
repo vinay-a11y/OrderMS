@@ -23,8 +23,8 @@ templates = Jinja2Templates(directory="templates")
 app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(cart.router)
-# app.include_router(payment.router)
-# app.include_router(otp.router)
+app.include_router(payment.router)
+app.include_router(otp.router)
 
 Base.metadata.create_all(bind=engine)
 
@@ -35,7 +35,4 @@ def index(request: Request, logged_in: str = Cookie(default=None)):
 
 
 
-@app.get("/product-details.html", response_class=HTMLResponse)
-def product_details(request: Request, logged_in: str = Cookie(default=None)):
-    is_logged_in = request.cookies.get("logged_in") == "true"
-    return templates.TemplateResponse("product-details.html", {"request": request, "is_logged_in": is_logged_in})
+

@@ -14,3 +14,7 @@ class UserCreate(BaseModel):
 class LoginRequest(BaseModel):
     mobile_number: str
     password: str
+
+class ResetPasswordRequest(BaseModel):
+    phone: str
+    newPassword: str

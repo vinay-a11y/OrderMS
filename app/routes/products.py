@@ -17,37 +17,39 @@ def product_page(request: Request):
       return RedirectResponse(url="/login", status_code=302)
      return templates.TemplateResponse("products.html", {"request": request})
 
-# @router.get("/product-details",response_class=HTMLResponse)
-# def list_products(request: Request, db: Session = Depends(get_db)):
-#    return templates.TemplateResponse("product-details.html", {"request": request})
+@router.get("/product-details.html", response_class=HTMLResponse)
+def product_details(request: Request):
+    return templates.TemplateResponse("product-details.html", {"request": request})
 
-
-
-@router.get("/api/products", response_model=list[ProductCreate])
+@router.get("/api/products")
 def get_all_products(db: Session = Depends(get_db)):
     try:
         products = db.query(Product).all()
-        # print("Products from DB:", products)
+
         if not products:
-            # print("No products found in DB")
             return []
-        
-        # Convert to dict for better debug visibility
-        product_list = [
-            {
+
+        product_list = []
+        for p in products:
+            # Filter out None values before taking max
+            price_list = [p.price_01, p.price_02, p.price_03, p.price_04]
+            valid_prices = [price for price in price_list if price is not None]
+            
+            max_price = max(valid_prices) if valid_prices else 0  # fallback to 0 or custom default
+
+            product_list.append({
                 "id": p.id,
                 "item_name": p.item_name,
                 "category": p.category,
-                "price_01": p.price_01,
+                "price_01": max_price,
                 "description": p.description
-            } for p in products
-        ]
-        # print("Returning products:", product_list)
-        return products
+            })
+
+        return product_list
+
     except Exception as e:
         print("Error getting products:", str(e))
-        raise
-
+        raise HTTPException(status_code=500, detail="Failed to fetch products")
 
 @router.get("/api/products/{product_id}")
 def get_product(product_id: int, db: Session = Depends(get_db)):

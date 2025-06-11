@@ -551,7 +551,7 @@ window.renderProducts = function(products) {
             <div class="product-image">${product.icon || "🍪"}</div>
             <div class="product-info">
                 <h3>${product.item_name || "Unnamed Product"}</h3>
-                <div class="product-price">₹${product.price_01 ? product.price_01.toFixed(2) : "N/A"}</div>
+                <div class="product-price">${product.price_01 ? product.price_01.toFixed(2) : "N/A"}</div>
                 <p>${product.description || "No description available"}</p>
                 <button class="add-to-cart" onclick="event.stopPropagation(); addToCart(${product.id})">
                     Add to Cart <i class="fas fa-shopping-cart"></i>
