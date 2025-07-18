@@ -25,7 +25,7 @@ export function ProductModal({ product, onClose }: ProductModalProps) {
         <div className="p-6 overflow-y-auto max-h-[calc(90vh-80px)]">
           <div className="space-y-8">
             {/* Product Information */}
-            <div>
+            <div> 
               <h3 className="text-lg font-semibold text-slate-900 mb-4 pb-2 border-b border-slate-200">
                 Product Information
               </h3>

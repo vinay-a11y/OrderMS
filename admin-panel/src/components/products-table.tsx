@@ -26,16 +26,31 @@ const handleDelete = async (id: number) => {
     if (!res.ok) throw new Error("Delete failed");
 
     alert("Product deleted successfully!");
-    window.location.reload(); // ✅ Reload the page
+    window.location.reload();
   } catch (error) {
     alert("Failed to delete the product.");
     console.error("Delete error:", error);
   }
 };
 
+const handleToggleStatus = async (id: number, currentStatus: boolean) => {
+  try {
+    const res = await fetch(`http://localhost:8000/api/products/${id}/toggle`, {
+      method: "PATCH",
+    });
+
+    if (!res.ok) throw new Error("Toggle failed");
+
+    const data = await res.json();
+    alert(`Product ${data.new_status ? "enabled" : "disabled"} successfully!`);
+    window.location.reload(); // Optional: use state update instead
+  } catch (error) {
+    alert("Failed to toggle product status.");
+    console.error("Toggle error:", error);
+  }
+};
 
 export function ProductsTable({ products, currentPage, onPageChange, onProductSelect, isLoading }: ProductsTableProps) {
-  // Pagination
   const totalPages = Math.ceil(products.length / PRODUCTS_PER_PAGE)
   const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE
   const endIndex = startIndex + PRODUCTS_PER_PAGE
@@ -79,6 +94,7 @@ export function ProductsTable({ products, currentPage, onPageChange, onProductSe
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Shelf Life</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Lead Time</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Description</th>
+                <th className="px-6 py-4 text-left font-semibold text-slate-700">Status</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Actions</th>
               </tr>
             </thead>
@@ -134,6 +150,16 @@ export function ProductsTable({ products, currentPage, onPageChange, onProductSe
                     </div>
                   </td>
                   <td className="px-6 py-4">
+                   <Button
+  size="sm"
+  variant={product.is_enabled ? "default" : "outline"}
+  className={product.is_enabled ? "bg-green-600 hover:bg-green-700" : "bg-gray-200 text-slate-700"}
+  onClick={() => handleToggleStatus(product.id, product.is_enabled)}
+>
+  {product.is_enabled ? "Disable" : "Enable"}
+</Button>
+                  </td>
+                  <td className="px-6 py-4">
                     <div className="flex gap-1">
                       <Button size="sm" variant="outline" onClick={() => onProductSelect(product)}>
                         <Eye className="h-3 w-3 mr-1" />
@@ -144,13 +170,13 @@ export function ProductsTable({ products, currentPage, onPageChange, onProductSe
                         Edit
                       </Button>
                       <Button
-  size="sm"
-  variant="destructive"
-  onClick={() => handleDelete(product.id)} // 🔁 Replace `product.id` with actual ID variable
->
-  <Trash2 className="h-3 w-3 mr-1" />
-  Delete
-</Button>
+                        size="sm"
+                        variant="destructive"
+                        onClick={() => handleDelete(product.id)}
+                      >
+                        <Trash2 className="h-3 w-3 mr-1" />
+                        Delete
+                      </Button>
                     </div>
                   </td>
                 </tr>
@@ -176,7 +202,6 @@ export function ProductsTable({ products, currentPage, onPageChange, onProductSe
               >
                 Previous
               </Button>
-
               <div className="flex gap-1">
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   const page = i + 1
@@ -193,7 +218,6 @@ export function ProductsTable({ products, currentPage, onPageChange, onProductSe
                   )
                 })}
               </div>
-
               <Button
                 variant="outline"
                 size="sm"

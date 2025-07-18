@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float
+from sqlalchemy import Column, Integer, String, Float, Boolean
 from app.database.session import Base
 
 class Product(Base):
@@ -19,3 +19,6 @@ class Product(Base):
     price_04 = Column(Float, nullable=True)
     description = Column(String(255), nullable=True)
     imagesrc = Column(String(255), nullable=True)
+    
+    # ✅ Add this field
+    is_enabled = Column(Boolean, default=True)

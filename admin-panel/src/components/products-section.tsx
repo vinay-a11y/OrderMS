@@ -20,7 +20,7 @@ import type { Product } from "@/types/products"
 const CONFIG = {
   PRODUCTS_PER_PAGE: 20,
   SEARCH_DEBOUNCE_DELAY: 300,
-  PRODUCTS_API_URL: "http://localhost:8000/api/products",
+  PRODUCTS_API_URL: "http://localhost:8000/api/products-state",
 }
 
 export function ProductsSection() {
@@ -89,7 +89,7 @@ export function ProductsSection() {
       filtered = filtered.filter(
         (product) =>
           product.item_name.toLowerCase().includes(query) ||
-          product.category.toLowerCase().includes(query) ||
+          product.category?.toLowerCase().includes(query) ||
           (product.description && product.description.toLowerCase().includes(query))
       )
     }
@@ -120,7 +120,7 @@ export function ProductsSection() {
   const stats = {
     totalProducts: products.length,
     totalCategories: categories.length,
-    lowStockProducts: products.filter((p) => p.shelf_life_days < 30).length,
+lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).length
   }
 
   useEffect(() => {
@@ -194,11 +194,14 @@ export function ProductsSection() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">All Categories</SelectItem>
-                {categories.map((category) => (
-                  <SelectItem key={category} value={category}>
-                    {category}
-                  </SelectItem>
-                ))}
+                {categories
+  .filter((category): category is string => !!category) // filter out undefined/null
+  .map((category) => (
+    <SelectItem key={category} value={category}>
+      {category}
+    </SelectItem>
+))}
+
               </SelectContent>
             </Select>
 

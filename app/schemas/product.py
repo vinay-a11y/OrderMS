@@ -2,7 +2,6 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-# ✅ For reading product (includes ID)
 class ProductCreate(BaseModel):
     id: int
     item_name: str
@@ -19,9 +18,12 @@ class ProductCreate(BaseModel):
     price_04: Optional[float] = None
     description: Optional[str] = None
     imagesrc: Optional[str] = None
+    is_enabled: Optional[bool] = True  # ✅ Add this field
 
     class Config:
-        from_attributes = True  # Pydantic v2 (replaces `orm_mode = True`)
+        from_attributes = True
+
+
 
 
 # ✅ For creating product (without ID — let DB handle autoincrement)
