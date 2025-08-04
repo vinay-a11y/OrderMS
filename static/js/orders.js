@@ -23,7 +23,7 @@ class OrdersManager {
   }
 
   loadUserDetails() {
-    const user = JSON.parse(localStorage.getItem("user") || "{}")
+    const user = JSON.parse(localStorage.getItem("user"))
     console.log("User from localStorage:", user)
 
     if (user && user.id) {
@@ -35,12 +35,12 @@ class OrdersManager {
       const dropdownUserEmail = document.getElementById("dropdownUserEmail")
 
       if (authButton && authText) {
-        authText.textContent = `Hello, ${user.name || "User"}`
+        authText.textContent = Hello ${user.first_name}
         authButton.onclick = () => this.toggleUserMenu()
       }
 
       if (dropdownUserName) {
-        dropdownUserName.textContent = user.name || "Guest User"
+        dropdownUserName.textContent = user.first_name || "Guest User"
       }
 
       if (dropdownUserEmail) {
@@ -60,11 +60,11 @@ class OrdersManager {
     try {
       console.log("Fetching orders from backend...")
 
-      const response = await fetch(`/api/orders?user_id=${this.userDetails.id}`, {
+      const response = await fetch(/api/orders?user_id=${this.userDetails.id}, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          Authorization: Bearer ${localStorage.getItem("token") || ""},
         },
       })
 
@@ -76,7 +76,7 @@ class OrdersManager {
         // Transform backend data to match frontend structure
         this.orders = this.orders.map((order) => this.transformBackendOrder(order))
       } else {
-        throw new Error(`API failed with status: ${response.status}`)
+        throw new Error(API failed with status: ${response.status})
       }
     } catch (error) {
       console.error("Error fetching orders:", error)
@@ -91,7 +91,7 @@ class OrdersManager {
   transformBackendOrder(backendOrder) {
     return {
       id: backendOrder.id,
-      razorpay_order_id: backendOrder.razorpay_order_id || `ORD${backendOrder.id}`,
+      razorpay_order_id: backendOrder.razorpay_order_id || ORD${backendOrder.id},
       user_id: backendOrder.user_id,
       total_amount: Number.parseFloat(backendOrder.total_amount),
       payment_status: backendOrder.payment_status,
@@ -202,7 +202,7 @@ class OrdersManager {
                               <i class="fas fa-${this.getStatusIcon(order.order_status)}"></i>
                               ${order.order_status.charAt(0).toUpperCase() + order.order_status.slice(1).replace("-", " ")}
                           </div>
-                          ${order.estimatedTime ? `<div class="estimated-time">${order.estimatedTime}</div>` : ""}
+                          ${order.estimatedTime ? <div class="estimated-time">${order.estimatedTime}</div> : ""}
                       </div>
                   </div>
   
@@ -216,14 +216,14 @@ class OrdersManager {
                               <div class="item-image" title="${item.name}">
                                   ${
                                     item.image
-                                      ? `<img src="${item.image}" alt="${item.name}">`
-                                      : `<div class="placeholder">${item.icon || "🍪"}</div>`
+                                      ? <img src="${item.image}" alt="${item.name}">
+                                      : <div class="placeholder">${item.icon || "🍪"}</div>
                                   }
                               </div>
                           `,
                             )
                             .join("")}
-                          ${remainingItems > 0 ? `<div class="item-image">+${remainingItems}</div>` : ""}
+                          ${remainingItems > 0 ? <div class="item-image">+${remainingItems}</div> : ""}
                       </div>
                       <div class="items-summary">
                           ${order.items.length} item${order.items.length > 1 ? "s" : ""} • 
@@ -434,7 +434,7 @@ class OrdersManager {
     existingToasts.forEach((toast) => toast.remove())
 
     const toast = document.createElement("div")
-    toast.className = `toast ${type}`
+    toast.className = toast ${type}
     toast.innerHTML = `
               <i class="fas fa-${type === "success" ? "check-circle" : type === "error" ? "exclamation-circle" : "info-circle"}"></i>
               ${message}
@@ -468,7 +468,7 @@ class OrdersManager {
     const categoryItems = document.querySelectorAll(".category-item")
     categoryItems.forEach((item) => item.classList.remove("active"))
 
-    const activeButton = document.querySelector(`[onclick="setOrderFilter('${filter}')"]`)
+    const activeButton = document.querySelector([onclick="setOrderFilter('${filter}')"])
     if (activeButton) {
       activeButton.classList.add("active")
     }
@@ -602,7 +602,7 @@ function openOrderModal(orderId) {
                           ${(order.address.type || "home").charAt(0).toUpperCase() + (order.address.type || "home").slice(1)}
                       </div>
                       <p>${order.address.line1}</p>
-                      ${order.address.line2 ? `<p>${order.address.line2}</p>` : ""}
+                      ${order.address.line2 ? <p>${order.address.line2}</p> : ""}
                       <p>${order.address.city}, ${order.address.state} - ${order.address.pincode}</p>
                   </div>
               </div>
@@ -618,8 +618,8 @@ function openOrderModal(orderId) {
                               <div class="item-detail-image">
                                   ${
                                     item.image
-                                      ? `<img src="${item.image}" alt="${item.name}">`
-                                      : `<div class="placeholder">${item.icon || "🍪"}</div>`
+                                      ? <img src="${item.image}" alt="${item.name}">
+                                      : <div class="placeholder">${item.icon || "🍪"}</div>
                                   }
                               </div>
                               <div class="item-detail-info">
@@ -712,6 +712,7 @@ function openOrderModal(orderId) {
 
 function closeOrderModal() {
   document.getElementById("orderModal").classList.remove("active")
+  
 }
 
 function openCancelModal(orderId) {
@@ -751,11 +752,11 @@ async function confirmCancelOrder() {
     confirmBtn.disabled = true
 
     // API call to cancel order
-    const response = await fetch(`/api/orders/${ordersManager.selectedOrderForCancel}/cancel`, {
+    const response = await fetch(/api/orders/${ordersManager.selectedOrderForCancel}/cancel, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+        Authorization: Bearer ${localStorage.getItem("token") || ""},
       },
       body: JSON.stringify({
         reason: reason,
@@ -770,7 +771,7 @@ async function confirmCancelOrder() {
         order.order_status = "cancelled"
         order.payment_status = "refunded"
         order.updated_at = new Date().toISOString()
-        order.notes = `Cancelled: ${reason}`
+        order.notes = Cancelled: ${reason}
       }
 
       ordersManager.showNotification(
@@ -838,7 +839,7 @@ function downloadBill(orderId) {
   const url = window.URL.createObjectURL(blob)
   const a = document.createElement("a")
   a.href = url
-  a.download = `SnackMart_Invoice_${order.razorpay_order_id}.html`
+  a.download = SnackMart_Invoice_${order.razorpay_order_id}.html
   document.body.appendChild(a)
   a.click()
   document.body.removeChild(a)

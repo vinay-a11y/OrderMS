@@ -15,12 +15,17 @@ from app.models.product import Product  # Ensures model is registered
 app = FastAPI()
 
 # ✅ CORS Middleware (FIXED)
+from fastapi.middleware.cors import CORSMiddleware
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://192.168.0.237:3000",  # ✅ Your local IP (LAN)
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "http://192.168.0.237:8000",
+        "http://139.59.2.94:8000",
+        "http://139.59.2.94:3000", # ✅ If frontend served from port 8000 on droplet
+        "http://139.59.2.94",        # ✅ If served directly (e.g., static HTML)
     ],
     allow_credentials=True,
     allow_methods=["*"],
@@ -47,3 +52,4 @@ Base.metadata.create_all(bind=engine)
 def index(request: Request, logged_in: str = Cookie(default=None)):
     is_logged_in = request.cookies.get("logged_in") == "true"
     return templates.TemplateResponse("products.html", {"request": request, "is_logged_in": is_logged_in})
+

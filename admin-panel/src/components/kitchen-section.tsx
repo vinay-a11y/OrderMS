@@ -32,7 +32,7 @@ export function KitchenSection() {
     try {
       if (!silent) setIsLoading(true)
 
-      const response = await fetch("http://localhost:8000/api/admin/orders")
+      const response = await fetch("http://139.59.2.94:8000/api/admin/orders")
       const fetchedOrders: Order[] = await response.json()
 
       if (!response.ok || !Array.isArray(fetchedOrders)) {
@@ -147,7 +147,7 @@ export function KitchenSection() {
     try {
       if (!silent) setIsLoading(true)
 
-      const response = await fetch("http://localhost:8000/api/admin/orders")
+      const response = await fetch("http://139.59.2.94:8000/api/admin/orders")
       const fetchedOrders: Order[] = await response.json()
 
       if (!response.ok || !Array.isArray(fetchedOrders)) {

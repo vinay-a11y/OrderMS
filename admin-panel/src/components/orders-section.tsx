@@ -45,26 +45,27 @@ export function OrdersSection() {
 
         // Try to fetch from backend first
         try {
-          const response = await fetch("http://localhost:8000/api/admin/orders", {
-            credentials: "include",
-          })
+  const response = await fetch("http://139.59.2.94:8000/api/admin/orders", {
+    credentials: "include",
+  });
 
-          if (response.ok) {
-            const data = await response.json()
-            setOrders(
-              data.sort((a: Order, b: Order) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()),
-            )
-            if (!silent) {
-              toast({
-                title: "Success",
-                description: "Orders loaded from backend",
-              })
-            }
-            return
-          }
-        } catch (error) {
-          console.error("Backend fetch failed, using mock data:", error)
-        }
+  if (response.ok) {
+    const data = await response.json();
+    setOrders(
+      data.sort((a: Order, b: Order) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+    );
+    if (!silent) {
+      toast({
+        title: "Success",
+        description: "Orders loaded from backend",
+      });
+    }
+    return;
+  }
+} catch (error) {
+  console.error("Backend fetch failed, using mock data:", error);
+}
+
 
         // Fallback to mock data
         const mockOrders: Order[] = [
@@ -186,7 +187,8 @@ export function OrdersSection() {
     try {
       // Try to update via API first
       try {
-        const response = await fetch(`http://localhost:8000/api/admin/orders/${orderId}`, {
+          const response = await fetch(`http://139.59.2.94:8000/api/admin/orders/${orderId}`, {
+
           method: "PATCH",
           headers: { "Content-Type": "application/json" },
           credentials: "include",

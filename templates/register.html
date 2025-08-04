@@ -16,11 +16,14 @@
     <div class="register-container">
         <!-- ===== LEFT PANEL ===== -->
         <div class="register-left">
-            <div class="register-icon" id="leftIcon">
+            <!-- <div class="register-icon" id="leftIcon">
                 <i class="fas fa-user-plus"></i>
-            </div>
-            <h1 id="leftTitle">Join SnackMart!</h1>
-            <p id="leftDescription">Create your account and get access to premium snacks, exclusive deals, and a personalized shopping experience.</p>
+            </div> -->
+            <a  class="logo">
+                <img src="/static/images/logo.png" alt="Gokhale Bandu Logo">
+            </a>
+            <h1 id="leftTitle">Join our Gokhale Bandhu's Family!</h1>
+            <!-- <p id="leftDescription">Create your account and get access to premium snacks, exclusive deals, and a personalized shopping experience.</p> -->
         </div>
 
         <!-- ===== RIGHT PANEL ===== -->
@@ -29,11 +32,12 @@
                 <!-- ===== REGISTRATION FORM SECTION ===== -->
                 <div id="registerSection">
                     <div class="section-header">
+                        <a href="/" class="logo">
+                            <img src="/static/images/logo.png" alt="Gokhale Bandu Logo">
+                        </a>
                         <h2>Create Account</h2>
                         <p>Fill in your details to get started</p>
                     </div>
-
-                   
 
                     <form class="register-form" id="registerForm" onsubmit="handleRegistration(event)">
                         <!-- Personal Information Section -->
@@ -84,7 +88,7 @@
                                     <div class="input-with-icon">
                                         <i class="fas fa-lock"></i>
                                         <input type="password" id="password" name="password" placeholder="Create password" required>
-                                        <i class="fas fa-eye password-toggle" onclick="togglePassword('password')"></i>
+                                        <i class="fas fa-eye password-toggle" onclick="togglePassword('password', this)"></i>
                                     </div>
                                     <div class="validation-message" id="passwordValidation"></div>
                                     <div class="password-strength" id="passwordStrength">
@@ -100,7 +104,7 @@
                                     <div class="input-with-icon">
                                         <i class="fas fa-lock"></i>
                                         <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm password" required>
-                                        <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmPassword')"></i>
+                                        <i class="fas fa-eye password-toggle" onclick="togglePassword('confirmPassword', this)"></i>
                                     </div>
                                     <div class="validation-message" id="confirmPasswordValidation"></div>
                                 </div>
@@ -136,7 +140,7 @@
                         <p>Enter the 6-digit code sent to your phone</p>
                         <div class="phone-display" id="phoneDisplay">
                             <i class="fas fa-mobile-alt"></i>
-                            <span>+91 98765 43210</span>
+                            <!-- <span>+91 98765 43210</span> -->
                         </div>
                     </div>
 <!-- 
@@ -194,7 +198,7 @@
         </div>
     </div>
 
-    <script type="module" src="static/js/register.js"></script>
+    <script src="static/js/register.js"></script>
       
     
 </body>

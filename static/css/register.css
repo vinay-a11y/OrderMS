@@ -1,4 +1,4 @@
-        /* ===== RESET & BASE STYLES ===== */
+/* ===== RESET & BASE STYLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -50,7 +50,32 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
             animation: slideInUp 0.8s ease-out;
             height: calc(100vh - 4rem);
             max-height: 800px;
+            
+
         }
+
+        .register-left .logo {
+            display: inline-block;
+            text-decoration: none;
+            padding: 5px;
+            margin-bottom: 10px;
+            transition: transform 0.2s ease;
+}
+
+/* Optional hover effect */
+        .register-left .logo:hover {
+            transform: scale(1.05);
+        }
+
+/* Style the logo image */
+        .register-left .logo img{
+            height: 250px;     /* adjust as needed */
+            width: auto;      /* maintain aspect ratio */
+            object-fit: contain;
+            vertical-align: middle;
+            border-radius: 8px; /* optional rounded corners */
+}
+
 
         @keyframes slideInUp {
             from {
@@ -161,6 +186,9 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
             background: #9b59b6;
             border-radius: 10px;
         }
+        .register-right .logo {
+           display: none;
+          }
 
         /* ===== SECTION HEADERS ===== */
         .section-header {
@@ -236,7 +264,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         .input-with-icon {
             position: relative;
         }
-
+        
         .input-with-icon i {
             position: absolute;
             left: 15px;
@@ -244,7 +272,22 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
             transform: translateY(-50%);
             color: #999;
             font-size: 1rem;
-        }
+            pointer-events: none; /* Optional: prevents accidental clicks */
+          }
+          
+        .input-with-icon .password-toggle {
+            pointer-events: auto;
+            right: 15px;
+            left: auto; /* override inherited 'left' from generic rule */
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 1rem;
+            cursor: pointer;
+            z-index: 2;
+          }
+       
 
         .form-group input,
         .form-group select,
@@ -687,6 +730,13 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         @media (max-width: 768px) {
+            html, body {
+                height: auto;
+                min-height: 100%;
+                overflow-x: hidden ; /* allow vertical scroll */
+                display: block;   /* override flex on body */
+                scroll-behavior: smooth;
+              }
             .register-container {
                 grid-template-columns: 1fr;
                 margin: 1rem;
@@ -716,9 +766,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
             }
 
             .back-home {
-                position: fixed;
-                top: 10px;
-                left: 10px;
+                display: none;
             }
 
             body {
@@ -755,4 +803,16 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
                 height: 45px;
                 font-size: 1.25rem;
             }
+            .back-home{
+                display: none;
+            }
+            .register-right .logo {
+                display: block;
+                margin: 0 auto 5px;
+              }
+            
+              .register-right .logo img {
+                height: 150px;     /* slightly smaller on mobile */
+                max-width: 100%;   /* prevent overflow */
+              }
         }

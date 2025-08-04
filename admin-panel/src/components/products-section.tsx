@@ -20,7 +20,7 @@ import type { Product } from "@/types/products"
 const CONFIG = {
   PRODUCTS_PER_PAGE: 20,
   SEARCH_DEBOUNCE_DELAY: 300,
-  PRODUCTS_API_URL: "http://localhost:8000/api/products-state",
+  PRODUCTS_API_URL: "http://139.59.2.94:8000/api/products-state",
 }
 
 export function ProductsSection() {

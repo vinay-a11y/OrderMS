@@ -122,7 +122,7 @@ body {
 }
 
 .logo img {
-  height: 50px;
+  height: 60px;
   width: auto;
   object-fit: contain;
   border-radius: 50%;
@@ -507,6 +507,7 @@ body {
   align-items: center;
   justify-content: center;
   gap: 0.8rem;
+  margin-bottom: 1.5rem;
   font-size: 1rem;
   color: #666;
 }
@@ -540,6 +541,7 @@ body {
   justify-content: center;
   gap: 1.2rem;
   margin-bottom: 1rem;
+  margin-top: 1rem;
 }
 
 .page-title i {
@@ -1582,6 +1584,9 @@ body {
   .desktop-only {
     display: none !important;
   }
+  .progress-labels{
+     font-size: 0.6rem;
+  }
 
   .mobile-only {
     display: block !important;
@@ -1593,8 +1598,8 @@ body {
 
   .top-header {
     min-height: 50px;
-    padding: 0.8rem 1rem;
-    gap: 1rem;
+    padding: 0.5rem 1rem;
+    gap: 0rem;
   }
 
   .welcome-message {
@@ -1735,6 +1740,10 @@ body {
   .page-subtitle {
     font-size: 0.9rem;
   }
+  .progress-labels{
+    font-size: 0.6rem;
+ }
+
 
   .footer-grid {
     grid-template-columns: 1fr;
