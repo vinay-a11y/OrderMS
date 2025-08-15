@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
           successMessage.style.display = "block";
 
           if (result.user.role === "admin") {
-            window.location.href = "/admin";
+                 window.location.href = "http://139.59.2.94:3000";
           } else {
             window.location.href = "/";
           } 

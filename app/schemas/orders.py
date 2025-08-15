@@ -17,7 +17,8 @@ class CartItem(BaseModel):
 
 
 class OrderCreateSchema(BaseModel):
-    
+    name: str            # <-- added
+    phone: str          # <-- added
     amount: float
     items: List[CartItem]
     userDetails: UserDetails

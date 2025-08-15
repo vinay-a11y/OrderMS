@@ -1,16 +1,10 @@
 "use client"
 
 import { useState, useEffect, useCallback } from "react"
-import { Package, Plus, Search, X, RefreshCw } from "lucide-react"
+import { Package, Plus, Search, X, RefreshCw, TrendingUp, BarChart3 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ProductsTable } from "./products-table"
 import { ProductModal } from "./product-modal"
 import { AddProductModal } from "./add-product-modal"
@@ -20,7 +14,7 @@ import type { Product } from "@/types/products"
 const CONFIG = {
   PRODUCTS_PER_PAGE: 20,
   SEARCH_DEBOUNCE_DELAY: 300,
-  PRODUCTS_API_URL: "http://139.59.2.94:8000/api/products-state",
+  PRODUCTS_API_URL: "/api/products-state",
 }
 
 export function ProductsSection() {
@@ -46,7 +40,7 @@ export function ProductsSection() {
         const response = await fetch(CONFIG.PRODUCTS_API_URL)
         console.log("Products response status:", response.status)
 
-        if (!response.ok) throw new Error("Failed to fetch products")
+        if (!response.ok) throw new Error(`HTTP ${response.status}`)
 
         const data: Product[] = await response.json()
         console.log("Products loaded:", data.length)
@@ -58,7 +52,7 @@ export function ProductsSection() {
         if (!silent) {
           toast({
             title: "Success",
-            description: "Products loaded successfully",
+            description: `Loaded ${sortedData.length} products successfully`,
           })
         }
       } catch (error) {
@@ -66,15 +60,18 @@ export function ProductsSection() {
         if (!silent) {
           toast({
             title: "Error",
-            description: "Failed to load products",
+            description: "Failed to load products from backend",
             variant: "destructive",
           })
         }
+        // Set empty array if backend fails
+        setProducts([])
+        setFilteredProducts([])
       } finally {
         if (!silent) setIsLoading(false)
       }
     },
-    [toast]
+    [toast],
   )
 
   const applyFiltersAndRender = useCallback(() => {
@@ -90,7 +87,7 @@ export function ProductsSection() {
         (product) =>
           product.item_name.toLowerCase().includes(query) ||
           product.category?.toLowerCase().includes(query) ||
-          (product.description && product.description.toLowerCase().includes(query))
+          (product.description && product.description.toLowerCase().includes(query)),
       )
     }
 
@@ -115,12 +112,20 @@ export function ProductsSection() {
     setFilteredProducts(filtered)
   }, [products, categoryFilter, searchQuery, sortBy, sortOrder])
 
-  const categories = [...new Set(products.map((p) => p.category))].sort()
+  const handleProductUpdate = useCallback(() => {
+    // Reload products without showing loading state
+    loadProducts(true)
+  }, [loadProducts])
+
+  const categories = [
+    ...new Set(products.map((p) => p.category).filter((c): c is string => typeof c === "string")),
+  ].sort()
 
   const stats = {
     totalProducts: products.length,
     totalCategories: categories.length,
-lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).length
+    lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Number.POSITIVE_INFINITY) < 30).length,
+    activeProducts: products.filter((p) => p.is_enabled && p.price_01 && p.price_01 > 0).length,
   }
 
   useEffect(() => {
@@ -139,42 +144,57 @@ lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).l
   }, [searchQuery])
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 py-6">
-        <div className="max-w-7xl mx-auto px-8">
+      <header className="bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-2">
-                <Package className="h-7 w-7 text-purple-600" />
-                Products Management
+              <h1 className="flex items-center gap-3 text-3xl font-bold mb-2 text-slate-900">
+                <div className="w-10 h-10 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Package className="h-5 w-5 text-white" />
+                </div>
+                Product Catalog
               </h1>
-              <p className="text-slate-600 text-sm">
-                Manage your product catalog, pricing, and inventory
-              </p>
+              <p className="text-slate-600 text-sm">Manage your product catalog, pricing, and inventory efficiently</p>
             </div>
 
             <div className="flex gap-4">
-              <StatCard label="Total Products" value={stats.totalProducts} />
-              <StatCard label="Categories" value={stats.totalCategories} />
-              <StatCard label="Low Stock" value={stats.lowStockProducts} />
+              <StatCard
+                label="Total Products"
+                value={stats.totalProducts}
+                icon={Package}
+                color="from-emerald-500 to-emerald-600"
+              />
+              <StatCard
+                label="Categories"
+                value={stats.totalCategories}
+                icon={BarChart3}
+                color="from-blue-500 to-blue-600"
+              />
+              <StatCard
+                label="Active Products"
+                value={stats.activeProducts}
+                icon={TrendingUp}
+                color="from-green-500 to-green-600"
+              />
             </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto p-8">
+<div className="max-w-[1500px] mx-auto p-6">
         {/* Controls */}
-        <div className="flex justify-between items-center mb-8 gap-4 flex-wrap">
+        <div className="flex justify-between items-center mb-6 gap-4 flex-wrap">
           {/* Search */}
           <div className="relative flex-1 max-w-md">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-slate-400" />
             <Input
-              placeholder="Search products..."
+              placeholder="Search products by name, category, or description..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-10"
+              className="pl-10 pr-10 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500"
             />
             {searchQuery && (
               <button
@@ -189,19 +209,16 @@ lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).l
           {/* Filters */}
           <div className="flex items-center gap-4">
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-48 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500">
                 <SelectValue placeholder="All Categories" />
               </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Categories</SelectItem>
-                {categories
-  .filter((category): category is string => !!category) // filter out undefined/null
-  .map((category) => (
-    <SelectItem key={category} value={category}>
-      {category}
-    </SelectItem>
-))}
-
+              <SelectContent className="bg-white shadow-md">
+                <SelectItem value="all">All Categories ({products.length})</SelectItem>
+                {categories.map((category) => (
+                  <SelectItem key={category} value={category}>
+                    {category} ({products.filter((p) => p.category === category).length})
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
 
@@ -213,10 +230,10 @@ lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).l
                 setSortOrder(newSortOrder as "asc" | "desc")
               }}
             >
-              <SelectTrigger className="w-48">
+              <SelectTrigger className="w-48 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500">
                 <SelectValue placeholder="Sort by" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white shadow-md">
                 <SelectItem value="item_name-asc">Name (A-Z)</SelectItem>
                 <SelectItem value="item_name-desc">Name (Z-A)</SelectItem>
                 <SelectItem value="category-asc">Category (A-Z)</SelectItem>
@@ -225,12 +242,20 @@ lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).l
               </SelectContent>
             </Select>
 
-            <Button variant="outline" onClick={() => loadProducts()}>
-              <RefreshCw className="h-4 w-4 mr-2" />
+            <Button
+              variant="outline"
+              onClick={() => loadProducts()}
+              className="border-slate-300 text-slate-700 hover:bg-slate-50"
+              disabled={isLoading}
+            >
+              <RefreshCw className={`h-4 w-4 mr-2 ${isLoading ? "animate-spin" : ""}`} />
               Refresh
             </Button>
 
-            <Button className="bg-purple-600 hover:bg-purple-700" onClick={() => setShowAddModal(true)}>
+            <Button
+              className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 shadow-lg"
+              onClick={() => setShowAddModal(true)}
+            >
               <Plus className="h-4 w-4 mr-2" />
               Add Product
             </Button>
@@ -243,22 +268,19 @@ lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).l
           currentPage={currentPage}
           onPageChange={setCurrentPage}
           onProductSelect={setSelectedProduct}
+          onProductUpdate={handleProductUpdate}
           isLoading={isLoading}
         />
 
         {/* Product Modal */}
-        {selectedProduct && (
-          <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />
-        )}
+        {selectedProduct && <ProductModal product={selectedProduct} onClose={() => setSelectedProduct(null)} />}
 
         {/* Add Product Modal */}
         {showAddModal && (
           <AddProductModal
+            isOpen={showAddModal}
             onClose={() => setShowAddModal(false)}
-            onSuccess={() => {
-              setShowAddModal(false)
-              loadProducts()
-            }}
+            onSuccess={handleProductUpdate}
           />
         )}
       </div>
@@ -266,16 +288,17 @@ lowStockProducts: products.filter((p) => (p.shelf_life_days ?? Infinity) < 30).l
   )
 }
 
-function StatCard({ label, value }: { label: string; value: number }) {
+function StatCard({ label, value, icon: Icon, color }: { label: string; value: number; icon: any; color: string }) {
   return (
-    <div className="bg-gradient-to-r from-purple-600 to-purple-500 text-white p-4 rounded-xl shadow-md min-w-[130px]">
+    <div className={`bg-gradient-to-r ${color} text-white p-4 rounded-xl shadow-lg min-w-[130px]`}>
       <div className="flex items-center gap-3">
-        <Package className="h-6 w-6 opacity-80" />
+        <Icon className="h-5 w-5 opacity-80" />
         <div>
-          <div className="text-2xl font-bold">{value.toLocaleString()}</div>
+          <div className="text-xl font-bold">{value.toLocaleString()}</div>
           <div className="text-xs opacity-90">{label}</div>
         </div>
       </div>
     </div>
   )
 }
+

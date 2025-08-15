@@ -82,7 +82,7 @@ body {
 
 /* Header Styles - Updated to match product page */
 .header {
-  background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 50%, #8e44ad 100%);
+  background: linear-gradient(135deg, #711c77 0%, #8e44ad 50%, #a21878 100%);
   color: #fff;
   position: fixed;
   width: 100%;
@@ -213,7 +213,7 @@ body {
 }
 
 .search-button {
-  background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 100%);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
   border: none;
   padding: 0 1.5rem;
@@ -224,7 +224,7 @@ body {
 }
 
 .search-button:hover {
-  background: linear-gradient(135deg, #8e44ad, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   transform: scale(1.05);
 }
 
@@ -349,7 +349,7 @@ body {
 .user-avatar {
   width: 50px;
   height: 50px;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -532,7 +532,7 @@ body {
   font-size: 3rem;
   font-weight: 800;
   color: #333;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -545,7 +545,7 @@ body {
 }
 
 .page-title i {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -601,7 +601,7 @@ body {
 }
 
 .order-count {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
   padding: 0.4rem 1rem;
   border-radius: 25px;
@@ -806,7 +806,7 @@ body {
 
 .item-image .placeholder {
   font-size: 1.4rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -838,12 +838,12 @@ body {
 }
 
 .action-btn.primary {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
 }
 
 .action-btn.primary:hover {
-  background: linear-gradient(135deg, #5a3c83, #8b49a6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(155, 89, 182, 0.3);
 }
@@ -895,7 +895,7 @@ body {
 
 .progress-line-fill {
   height: 100%;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   transition: width 0.5s ease;
 }
 
@@ -916,7 +916,7 @@ body {
 }
 
 .progress-step.completed {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
 }
 
@@ -1006,7 +1006,7 @@ body {
   font-size: 1.3rem;
   font-weight: 700;
   color: #333;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1098,7 +1098,7 @@ body {
   align-items: center;
   gap: 0.4rem;
   padding: 0.3rem 0.8rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
   border-radius: 15px;
   font-size: 0.75rem;
@@ -1143,7 +1143,7 @@ body {
 
 .item-detail-image .placeholder {
   font-size: 1.8rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1319,7 +1319,7 @@ body {
   font-size: 5rem;
   color: #cbd5e1;
   margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1339,7 +1339,7 @@ body {
 /* Footer */
 .footer {
   position: relative;
-  background: linear-gradient(135deg, #2d1b69 0%, #6a4c93 100%);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
   margin-top: 4rem;
   overflow: hidden;
@@ -1547,13 +1547,13 @@ body {
 
 .orders-list::-webkit-scrollbar-thumb,
 .modal-body::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   border-radius: 4px;
 }
 
 .orders-list::-webkit-scrollbar-thumb:hover,
 .modal-body::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(135deg, #5a3c83, #8b49a6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
 }
 
 /* Responsive Design */
@@ -1581,7 +1581,7 @@ body {
     padding-top: 60px;
   }
 
-  .desktop-only {
+  .desktop-only,.page-header {
     display: none !important;
   }
   .progress-labels{
@@ -1817,3 +1817,4 @@ select:focus {
     transition-duration: 0.01ms !important;
   }
 }
+

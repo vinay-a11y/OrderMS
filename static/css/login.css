@@ -83,7 +83,8 @@
 }
 
         .login-left {
-            background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 50%, #8e44ad 100%);
+          background: linear-gradient(135deg, #711c77 0%, #8e44ad 50%, #a21878 100%);
+
             color: white;
             padding: 3rem;
             display: flex;
@@ -242,7 +243,8 @@
         }
 
         .forgot-password {
-            color: #9b59b6 ;
+            color: #a21878 ;
+
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.3s ease;
@@ -250,12 +252,12 @@
         }
 
         .forgot-password:hover {
-            color: #6a4c93 ;
+            color: #a21878 ;
             text-decoration: underline;
         }
 
         .login-btn {
-  background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 100%);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
             color: white;
             border: none;
             padding: 15px;
@@ -299,14 +301,14 @@
         }
 
         .signup-link a {
-            color: #9b59b6;
+            color: #711c77;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
         }
 
         .signup-link a:hover {
-            color: #6a4c93;
+            color: #711c77;
             text-decoration: underline;
         }
 
@@ -314,7 +316,7 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            color: #6a4c93;
+            color: #711c77;
             text-decoration: none;
             display: flex;
             align-items: center;
@@ -594,3 +596,4 @@
           }
           
         }
+

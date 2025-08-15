@@ -1,0 +1,198 @@
+nohup: ignoring input
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started parent process [173904]
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+INFO:     Started server process [173907]
+INFO:     Started server process [173906]
+INFO:     Waiting for application startup.
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Application startup complete.
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     34.68.218.190:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/login.css HTTP/1.0" 304 Not Modified
+INFO:     103.172.226.128:0 - "POST /login HTTP/1.0" 401 Unauthorized
+INFO:     103.172.226.128:0 - "GET /register HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/register.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/register.js HTTP/1.0" 200 OK
+(trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/root/OrderMS/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     103.172.226.128:0 - "POST /register HTTP/1.0" 303 See Other
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+(trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/root/OrderMS/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     103.172.226.128:0 - "POST /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=2 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /register HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/register.js HTTP/1.0" 304 Not Modified
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/login.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/login.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /register HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/register.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/register.js HTTP/1.0" 200 OK
+INFO:     Waiting for child process [173906]
+INFO:     Child process [173906] died
+/usr/lib/python3.12/multiprocessing/resource_tracker.py:123: UserWarning: resource_tracker: process died unexpectedly, relaunching.  Some resources might leak.
+  warnings.warn('resource_tracker: process died unexpectedly, '
+INFO:     Waiting for child process [173907]
+INFO:     Child process [173907] died
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+INFO:     Started server process [173997]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Started server process [173998]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/product.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/images/logo.png HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/products.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     Received SIGHUP, restarting processes.
+INFO:     Waiting for child process [173997]
+INFO:     Waiting for child process [173998]
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+INFO:     Started server process [174013]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+INFO:     Started server process [174014]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     223.189.49.114:0 - "GET / HTTP/1.0" 200 OK
+INFO:     223.189.49.114:0 - "GET /static/css/product.css HTTP/1.0" 200 OK
+INFO:     223.189.49.114:0 - "GET /static/js/products.js HTTP/1.0" 200 OK
+INFO:     223.189.49.114:0 - "GET /static/images/logo.png HTTP/1.0" 200 OK
+INFO:     223.189.49.114:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     223.189.49.114:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+(trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/root/OrderMS/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     103.172.226.128:0 - "POST /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=2 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/user/addresses?id=2 HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "POST /api/user/address HTTP/1.0" 200 OK
+Amount in paise: 50000
+INFO:     103.172.226.128:0 - "POST /create-order/ HTTP/1.0" 200 OK
+Received payment data: {'order_id': 'order_R2wBMbJPKHIuF8', 'payment_id': 'pay_R2wBano7elqwFh', 'signature': '8841239147707fedcac8c16d7fabda0e60a7063d5a0bd239cc3d3526ecc92a62', 'user_details': {'first_name': 'Vinay', 'id': 2, 'role': 'user'}, 'delivery_address': {'id': 1754677313339, 'city': 'Bhiwandi', 'type': 'home', 'line1': 'Mansarovar', 'line2': 'Bhiwandi', 'state': 'Maharashtra', 'pincode': '421302'}, 'items': [{'id': 1, 'name': 'Besan Ladoo', 'price': 250, 'description': 'Pure Ghee,Besan,Cashew,Raisins, Cardamom.', 'image': 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgHrfB9Na3SjO3hXNKO0i1Fes3qMGwD2KCaA&s', 'category': 'Ladoo', 'quantity': 2, 'variant': '500gm'}], 'amount': 500}
+INFO:     103.172.226.128:0 - "POST /verify-payment/ HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /orders.html?order_id=9 HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/orders.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/orders.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/orders?user_id=2 HTTP/1.0" 200 OK
+INFO:     43.166.247.155:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+(trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/root/OrderMS/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     103.172.226.128:0 - "POST /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=2 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /admin HTTP/1.0" 302 Found
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "POST /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     157.180.29.204:0 - "GET / HTTP/1.0" 200 OK
+INFO:     20.98.140.180:0 - "GET /owa/auth/logon.aspx HTTP/1.0" 404 Not Found
+INFO:     194.50.16.252:0 - "GET / HTTP/1.0" 200 OK
+INFO:     194.50.16.252:0 - "GET / HTTP/1.0" 200 OK
+INFO:     66.249.77.163:0 - "GET /robots.txt HTTP/1.0" 404 Not Found
+INFO:     182.42.111.156:0 - "GET / HTTP/1.0" 200 OK
+INFO:     73.177.237.47:0 - "POST /xmlrpc.php HTTP/1.0" 404 Not Found
+INFO:     43.163.84.243:0 - "GET / HTTP/1.0" 200 OK
+INFO:     167.94.146.51:0 - "GET / HTTP/1.0" 200 OK
+INFO:     167.94.146.51:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     167.94.146.51:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     167.94.146.51:0 - "GET /.well-known/security.txt HTTP/1.0" 404 Not Found
+INFO:     66.249.64.10:0 - "GET /robots.txt HTTP/1.0" 404 Not Found
+INFO:     66.249.64.11:0 - "GET / HTTP/1.0" 200 OK
+INFO:     167.71.111.105:0 - "GET / HTTP/1.0" 200 OK
+INFO:     167.71.111.105:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [174013]
+INFO:     Finished server process [174014]
+INFO:     Received SIGTERM, exiting.
+INFO:     Waiting for child process [174013]
+INFO:     Waiting for child process [174014]
+INFO:     Stopping parent process [173904]

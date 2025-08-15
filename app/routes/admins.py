@@ -5,6 +5,8 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session
+import logging
+logging.basicConfig(level=logging.INFO)
 
 from app.database.session import get_db
 from app.models.orders import Order
@@ -82,19 +84,10 @@ def create_shiprocket_order(order: Order, token: str):
     return resp
 
 
-@router.get("/admin", response_class=HTMLResponse)
-def admin_page(request: Request):
-    if request.cookies.get("logged_in") != "true":
-        return RedirectResponse(url="/login", status_code=302)
-    if request.cookies.get("user_role") != "admin":
-        return HTMLResponse("Unauthorized", status_code=403)
-    return templates.TemplateResponse("admin.html", {"request": request})
-
 
 @router.get("/api/admin/orders")
 def get_orders(db: Session = Depends(get_db)):
     return db.query(Order).all()
-
 
 @router.patch("/api/admin/orders/{order_id}")
 def update_order_status(order_id: int, payload: OrderStatusUpdate, db: Session = Depends(get_db)):
@@ -102,25 +95,12 @@ def update_order_status(order_id: int, payload: OrderStatusUpdate, db: Session =
     if not order:
         raise HTTPException(status_code=404, detail="Order not found")
 
+    # Just update the status directly
     order.order_status = payload.order_status
     db.commit()
     db.refresh(order)
 
-    if payload.order_status.lower() == "inprocess":
-        try:
-            token = get_shiprocket_token()
-            resp = create_shiprocket_order(order, token)
-            data = resp.json()
-            if resp.status_code == 200 and data.get("status") == 1:
-                order.order_status = "shiprocket_placed"
-                db.commit()
-            else:
-                raise HTTPException(status_code=500, detail=f"Shiprocket error: {data}")
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=str(e))
-
     return order
-
 
 @router.post("/api/admin/place-and-ship-orders")
 def place_and_ship_orders(db: Session = Depends(get_db)):
@@ -189,4 +169,5 @@ def place_and_ship_orders(db: Session = Depends(get_db)):
             failed.append({"id": order.id, "error": str(e)})
 
     return {"shipped": placed, "failed": failed}
+
 

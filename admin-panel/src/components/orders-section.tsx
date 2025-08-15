@@ -37,144 +37,43 @@ export function OrdersSection() {
 
   const { toast } = useToast()
 
-  // Load orders from API
+  // Load orders from API - using real backend data
   const loadOrders = useCallback(
     async (silent = false) => {
       try {
         if (!silent) setIsLoading(true)
 
-        // Try to fetch from backend first
-        try {
-  const response = await fetch("http://139.59.2.94:8000/api/admin/orders", {
-    credentials: "include",
-  });
+const response = await fetch("/api/admin/orders", {
+          credentials: "include",
+        })
 
-  if (response.ok) {
-    const data = await response.json();
-    setOrders(
-      data.sort((a: Order, b: Order) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-    );
-    if (!silent) {
-      toast({
-        title: "Success",
-        description: "Orders loaded from backend",
-      });
-    }
-    return;
-  }
-} catch (error) {
-  console.error("Backend fetch failed, using mock data:", error);
-}
+        if (response.ok) {
+          const data = await response.json()
+          const sortedData = data.sort(
+            (a: Order, b: Order) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime(),
+          )
+          setOrders(sortedData)
 
-
-        // Fallback to mock data
-        const mockOrders: Order[] = [
-          {
-            id: 1001,
-            razorpay_order_id: "order_demo_001",
-            customer_name: "John Doe",
-            phone_number: "+91 9876543210",
-            created_at: new Date().toISOString(),
-            total_amount: 1250,
-            order_status: "placed",
-            items: [
-              { name: "Organic Almonds", variant: "500g", quantity: 2, price: 450, originalPrice: 500, weight: 500 },
-              { name: "Honey", variant: "250g", quantity: 1, price: 350, originalPrice: 400, weight: 250 },
-            ],
-            address: {
-              line1: "123 Main Street",
-              city: "Mumbai",
-              state: "Maharashtra",
-              pincode: "400001",
-            },
-          },
-          {
-            id: 1002,
-            razorpay_order_id: "order_demo_002",
-            customer_name: "Jane Smith",
-            phone_number: "+91 9876543211",
-            created_at: new Date(Date.now() - 86400000).toISOString(),
-            total_amount: 850,
-            order_status: "confirmed",
-            items: [
-              { name: "Organic Rice", variant: "1kg", quantity: 1, price: 850, originalPrice: 900, weight: 1000 },
-            ],
-            address: {
-              line1: "456 Park Avenue",
-              city: "Delhi",
-              state: "Delhi",
-              pincode: "110001",
-            },
-          },
-          {
-            id: 1003,
-            razorpay_order_id: "order_demo_003",
-            customer_name: "Bob Johnson",
-            phone_number: "+91 9876543212",
-            created_at: new Date(Date.now() - 172800000).toISOString(),
-            total_amount: 2100,
-            order_status: "inprocess",
-            items: [{ name: "Mixed Nuts", variant: "500g", quantity: 3, price: 700, originalPrice: 750, weight: 500 }],
-            address: {
-              line1: "789 Oak Street",
-              city: "Bangalore",
-              state: "Karnataka",
-              pincode: "560001",
-            },
-          },
-          {
-            id: 1004,
-            razorpay_order_id: "order_demo_004",
-            customer_name: "Alice Brown",
-            phone_number: "+91 9876543213",
-            created_at: new Date(Date.now() - 259200000).toISOString(),
-            total_amount: 1800,
-            order_status: "dispatched",
-            items: [
-              { name: "Cashews", variant: "250g", quantity: 2, price: 600, originalPrice: 650, weight: 250 },
-              { name: "Dates", variant: "500g", quantity: 1, price: 600, originalPrice: 700, weight: 500 },
-            ],
-            address: {
-              line1: "321 Pine Street",
-              city: "Chennai",
-              state: "Tamil Nadu",
-              pincode: "600001",
-            },
-          },
-          {
-            id: 1005,
-            razorpay_order_id: "order_demo_005",
-            customer_name: "Charlie Wilson",
-            phone_number: "+91 9876543214",
-            created_at: new Date(Date.now() - 345600000).toISOString(),
-            total_amount: 950,
-            order_status: "delivered",
-            items: [{ name: "Walnuts", variant: "300g", quantity: 1, price: 950, originalPrice: 1000, weight: 300 }],
-            address: {
-              line1: "654 Elm Street",
-              city: "Pune",
-              state: "Maharashtra",
-              pincode: "411001",
-            },
-          },
-        ]
-
-        setOrders(mockOrders)
-        if (!silent) {
-          toast({
-            title: "Mock Data Loaded",
-            description: "Using demo data for testing",
-          })
+          if (!silent) {
+            toast({
+              title: "Success",
+              description: `Loaded ${sortedData.length} orders from backend`,
+            })
+          }
+        } else {
+          throw new Error(`HTTP ${response.status}`)
         }
       } catch (error) {
         console.error("Error loading orders:", error)
         if (!silent) {
           toast({
             title: "Error",
-            description: "Failed to load orders",
+            description: "Failed to load orders from backend",
             variant: "destructive",
           })
         }
+        // Set empty array if backend fails
+        setOrders([])
       } finally {
         if (!silent) setIsLoading(false)
       }
@@ -185,39 +84,27 @@ export function OrdersSection() {
   // Update order status
   const updateOrderStatus = async (orderId: number, newStatus: OrderStatus) => {
     try {
-      // Try to update via API first
-      try {
-          const response = await fetch(`http://139.59.2.94:8000/api/admin/orders/${orderId}`, {
-
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify({ order_status: newStatus }),
-        })
-
-        if (response.ok) {
-          const updatedOrder = await response.json()
-          setOrders((prev) =>
-            prev.map((order) =>
-              order.id === orderId ? { ...order, order_status: updatedOrder.order_status || newStatus } : order,
-            ),
-          )
-          toast({
-            title: "Success",
-            description: `Order #${orderId} status updated to ${newStatus}`,
-          })
-          return
-        }
-      } catch (error) {
-        console.error("API update failed, updating locally:", error)
-      }
-
-      // Fallback to local update
-      setOrders((prev) => prev.map((order) => (order.id === orderId ? { ...order, order_status: newStatus } : order)))
-      toast({
-        title: "Success",
-        description: `Order #${orderId} status updated to ${newStatus} (demo mode)`,
+      const response = await fetch(`${CONFIG.API_BASE_URL}/${orderId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ order_status: newStatus }),
       })
+
+      if (response.ok) {
+        const updatedOrder = await response.json()
+        setOrders((prev) =>
+          prev.map((order) =>
+            order.id === orderId ? { ...order, order_status: updatedOrder.order_status || newStatus } : order,
+          ),
+        )
+        toast({
+          title: "Success",
+          description: `Order #${orderId} status updated to ${newStatus}`,
+        })
+      } else {
+        throw new Error(`HTTP ${response.status}`)
+      }
     } catch (error) {
       console.error("Error updating order status:", error)
       toast({
@@ -241,8 +128,18 @@ export function OrdersSection() {
 
     try {
       const orderIds = Array.from(selectedOrders)
+      const updatePromises = orderIds.map((orderId) =>
+        fetch(`${CONFIG.API_BASE_URL}/${orderId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ order_status: newStatus }),
+        }),
+      )
 
-      // Update locally
+      await Promise.all(updatePromises)
+
+      // Update local state
       setOrders((prev) =>
         prev.map((order) => (orderIds.includes(order.id) ? { ...order, order_status: newStatus } : order)),
       )
@@ -289,13 +186,13 @@ export function OrdersSection() {
     const rows = filteredOrders.map((order) => [
       order.id,
       order.razorpay_order_id,
-      order.customer_name || "",
-      order.phone_number || "",
+      order.name || "",
+      order.phone || "",
       formatDate(order.created_at),
       order.total_amount,
       order.order_status,
-      order.items.map((item) => `${item.name} (${item.quantity}x${item.variant})`).join("; "),
-      `${order.address.line1}, ${order.address.city}, ${order.address.state} - ${order.address.pincode}`,
+      order.items?.map((item) => `${item.name} (${item.quantity}x${item.variant})`).join("; ") || "",
+      `${order.address?.line1 || ""}, ${order.address?.city || ""}, ${order.address?.state || ""} - ${order.address?.pincode || ""}`,
     ])
 
     const csvContent = [headers, ...rows].map((row) => row.map((field) => `"${field}"`).join(",")).join("\n")
@@ -304,7 +201,7 @@ export function OrdersSection() {
     const link = document.createElement("a")
     const url = URL.createObjectURL(blob)
     link.setAttribute("href", url)
-    link.setAttribute("download", `orders_${currentTab}_${new Date().toISOString().split("T")[0]}.csv`)
+    link.setAttribute("download", `gokhale_bhandu_orders_${currentTab}_${new Date().toISOString().split("T")[0]}.csv`)
     link.style.visibility = "hidden"
     document.body.appendChild(link)
     link.click()
@@ -416,10 +313,10 @@ export function OrdersSection() {
       filtered = filtered.filter(
         (order) =>
           order.id.toString().includes(query) ||
-          order.razorpay_order_id.toLowerCase().includes(query) ||
-          (order.customer_name && order.customer_name.toLowerCase().includes(query)) ||
-          (order.phone_number && order.phone_number.toLowerCase().includes(query)),
-      )
+          order.razorpay_order_id?.toLowerCase().includes(query) ||
+          (order.name && order.name.toLowerCase().includes(query)) ||
+          (order.phone && order.phone.toLowerCase().includes(query)),
+      ) 
     }
 
     // Apply sorting with proper null/undefined handling
@@ -462,7 +359,7 @@ export function OrdersSection() {
     })
   }
 
-  // Calculate statistics
+  // Calculate real statistics from actual data
   const stats = {
     totalOrders: orders.length,
     recentOrders: orders.filter((order) => {
@@ -470,10 +367,12 @@ export function OrdersSection() {
       recentCutoff.setDate(recentCutoff.getDate() - CONFIG.RECENT_DAYS_FILTER)
       return new Date(order.created_at) >= recentCutoff
     }).length,
-    pendingOrders: orders.filter((order) => !["completed", "rejected"].includes(order.order_status)).length,
+    pendingOrders: orders.filter((order) => !["completed", "rejected", "delivered"].includes(order.order_status))
+      .length,
+    totalRevenue: orders.reduce((sum, order) => sum + (order.total_amount || 0), 0),
   }
 
-  // Calculate tab counts
+  // Calculate tab counts from real data
   const tabCounts = {
     recent: orders.filter((order) => {
       const recentCutoff = new Date()
@@ -493,6 +392,13 @@ export function OrdersSection() {
   // Effects
   useEffect(() => {
     loadOrders()
+
+    // Set up auto-refresh
+    const interval = setInterval(() => {
+      loadOrders(true) // Silent refresh
+    }, CONFIG.AUTO_REFRESH_INTERVAL)
+
+    return () => clearInterval(interval)
   }, [loadOrders])
 
   useEffect(() => {
@@ -521,15 +427,19 @@ export function OrdersSection() {
   ]
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
       {/* Header */}
-      <header className="bg-white border-b border-slate-200 py-6">
-        <div className="max-w-7xl mx-auto px-8">
+      <header className="bg-white border-b border-slate-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-8 py-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="flex items-center gap-3 text-2xl font-bold text-slate-900 mb-2">
-                <ClipboardList className="h-7 w-7 text-purple-600" />
-                Orders Management
+              <h1 className="flex items-center gap-3 text-3xl font-bold mb-2">
+                <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <ClipboardList className="h-5 w-5 text-white" />
+                </div>
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Gokhale Bhandu Orders
+                </span>
               </h1>
               <p className="text-slate-600 text-sm">
                 Manage and track all customer orders with progression: Placed → Confirmed → In Process → Dispatched →
@@ -539,7 +449,7 @@ export function OrdersSection() {
 
             {/* Stats Cards */}
             <div className="flex gap-4">
-              <div className="bg-gradient-to-r from-purple-600 to-purple-500 text-white p-4 rounded-xl shadow-md min-w-[130px]">
+              <div className="bg-gradient-to-r from-blue-500 to-purple-600 text-white p-4 rounded-xl shadow-lg min-w-[130px]">
                 <div className="flex items-center gap-3">
                   <ShoppingCart className="h-6 w-6 opacity-80" />
                   <div>
@@ -549,7 +459,7 @@ export function OrdersSection() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-600 to-purple-500 text-white p-4 rounded-xl shadow-md min-w-[130px]">
+              <div className="bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-4 rounded-xl shadow-lg min-w-[130px]">
                 <div className="flex items-center gap-3">
                   <Clock className="h-6 w-6 opacity-80" />
                   <div>
@@ -559,7 +469,7 @@ export function OrdersSection() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-r from-purple-600 to-purple-500 text-white p-4 rounded-xl shadow-md min-w-[130px]">
+              <div className="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-4 rounded-xl shadow-lg min-w-[130px]">
                 <div className="flex items-center gap-3">
                   <HourglassIcon className="h-6 w-6 opacity-80" />
                   <div>
@@ -586,10 +496,10 @@ export function OrdersSection() {
                   setCurrentTab(tab.id)
                   setCurrentPage(1)
                 }}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium whitespace-nowrap transition-all ${
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-medium whitespace-nowrap transition-all duration-200 ${
                   currentTab === tab.id
-                    ? "bg-gradient-to-r from-purple-600 to-purple-500 text-white shadow-md"
-                    : "bg-white text-slate-600 border border-slate-200 hover:bg-purple-50 hover:text-purple-600 hover:border-purple-200"
+                    ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg transform scale-105"
+                    : "bg-white text-slate-600 border border-slate-200 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:text-blue-600 hover:border-blue-200 shadow-sm"
                 }`}
               >
                 <Icon className="h-4 w-4" />
@@ -615,7 +525,7 @@ export function OrdersSection() {
               placeholder="Search by Order ID, Razorpay ID, Customer Name, or Phone..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-10"
+              className="pl-10 pr-10 border-slate-300 focus:border-blue-500 focus:ring-blue-500"
             />
             {searchQuery && (
               <button
@@ -630,10 +540,10 @@ export function OrdersSection() {
           {/* Filters */}
           <div className="flex items-center gap-4">
             <Select value={dateFilter} onValueChange={setDateFilter}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger className="w-40 border-slate-300 focus:border-blue-500 focus:ring-blue-500">
                 <SelectValue />
               </SelectTrigger>
-              <SelectContent>
+<SelectContent className="bg-white shadow-md">
                 <SelectItem value="all">All Time</SelectItem>
                 <SelectItem value="today">Today</SelectItem>
                 <SelectItem value="yesterday">Yesterday</SelectItem>
@@ -645,18 +555,36 @@ export function OrdersSection() {
 
             {dateFilter === "custom" && (
               <>
-                <Input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-40" />
-                <Input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-40" />
+                <Input
+                  type="date"
+                  value={startDate}
+                  onChange={(e) => setStartDate(e.target.value)}
+                  className="w-40 border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                />
+                <Input
+                  type="date"
+                  value={endDate}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  className="w-40 border-slate-300 focus:border-blue-500 focus:ring-blue-500"
+                />
               </>
             )}
 
             {/* Action Buttons */}
-            <Button variant="outline" onClick={() => loadOrders()}>
+            <Button
+              variant="outline"
+              onClick={() => loadOrders()}
+              className="border-slate-300 text-slate-700 hover:bg-slate-50"
+            >
               <RefreshCw className="h-4 w-4 mr-2" />
               Refresh
             </Button>
 
-            <Button variant="outline" onClick={exportOrders}>
+            <Button
+              variant="outline"
+              onClick={exportOrders}
+              className="border-blue-300 text-blue-700 hover:bg-blue-50 bg-transparent"
+            >
               <Download className="h-4 w-4 mr-2" />
               Export
             </Button>
@@ -665,23 +593,33 @@ export function OrdersSection() {
 
         {/* Bulk Actions */}
         {selectedOrders.size > 0 && (
-          <div className="bg-purple-50 border border-purple-200 rounded-xl p-4 mb-6">
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-xl p-4 mb-6 shadow-sm">
             <div className="flex justify-between items-center">
-              <span className="font-semibold text-purple-700">
+              <span className="font-semibold text-blue-700">
                 {selectedOrders.size} order{selectedOrders.size !== 1 ? "s" : ""} selected
               </span>
               <div className="flex gap-2">
                 <Button
                   size="sm"
                   onClick={() => bulkUpdateStatus("confirmed")}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue-600 hover:bg-blue-700 shadow-sm"
                 >
                   Confirm All
                 </Button>
-                <Button size="sm" onClick={() => bulkUpdateStatus("rejected")} variant="destructive">
+                <Button
+                  size="sm"
+                  onClick={() => bulkUpdateStatus("rejected")}
+                  variant="destructive"
+                  className="shadow-sm"
+                >
                   Reject All
                 </Button>
-                <Button size="sm" onClick={() => setSelectedOrders(new Set())} variant="outline">
+                <Button
+                  size="sm"
+                  onClick={() => setSelectedOrders(new Set())}
+                  variant="outline"
+                  className="border-slate-300 text-slate-700 hover:bg-slate-50"
+                >
                   Clear Selection
                 </Button>
               </div>
@@ -707,3 +645,4 @@ export function OrdersSection() {
     </div>
   )
 }
+

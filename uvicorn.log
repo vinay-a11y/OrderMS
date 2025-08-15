@@ -1,0 +1,87 @@
+nohup: ignoring input
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Started parent process [176489]
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+INFO:     Started server process [176491]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+/root/OrderMS/venv/lib/python3.12/site-packages/razorpay/client.py:4: UserWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html. The pkg_resources package is slated for removal as early as 2025-11-30. Refrain from using this package or pin to Setuptools<81.
+  import pkg_resources
+INFO:     Started server process [176492]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/product.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/images/logo.png HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/products.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /orders.html HTTP/1.0" 302 Found
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/login.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/login.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /orders.html HTTP/1.0" 302 Found
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /register HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/register.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/register.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /orders.html HTTP/1.0" 302 Found
+INFO:     103.172.226.128:0 - "GET /login HTTP/1.0" 200 OK
+(trapped) error reading bcrypt version
+Traceback (most recent call last):
+  File "/root/OrderMS/venv/lib/python3.12/site-packages/passlib/handlers/bcrypt.py", line 620, in _load_backend_mixin
+    version = _bcrypt.__about__.__version__
+              ^^^^^^^^^^^^^^^^^
+AttributeError: module 'bcrypt' has no attribute '__about__'
+INFO:     103.172.226.128:0 - "POST /login HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /orders.html HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/orders.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/orders.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/orders?user_id=1 HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /orders.html HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/orders?user_id=1 HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET / HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/product.css HTTP/1.0" 304 Not Modified
+INFO:     103.172.226.128:0 - "GET /api/addresses?user_id=1 HTTP/1.0" 404 Not Found
+INFO:     103.172.226.128:0 - "GET /api/products HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /cart HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/css/cart.css HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /static/js/cart.js HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/user/addresses?id=1 HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /cart HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "POST /cart HTTP/1.0" 405 Method Not Allowed
+INFO:     103.172.226.128:0 - "POST /cart HTTP/1.0" 405 Method Not Allowed
+Amount in paise: 20000
+INFO:     103.172.226.128:0 - "POST /create-order/ HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /cart HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /cart HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/user/addresses?id=1 HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "POST /cart HTTP/1.0" 405 Method Not Allowed
+INFO:     103.172.226.128:0 - "POST /cart HTTP/1.0" 405 Method Not Allowed
+INFO:     103.172.226.128:0 - "GET /orders.html HTTP/1.0" 200 OK
+INFO:     103.172.226.128:0 - "GET /api/orders?user_id=1 HTTP/1.0" 200 OK
+INFO:     Received SIGTERM, exiting.
+INFO:     Terminated child process [176491]
+INFO:     Terminated child process [176492]
+INFO:     Waiting for child process [176491]
+INFO:     Shutting down
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [176491]
+INFO:     Finished server process [176492]
+INFO:     Waiting for child process [176492]
+INFO:     Stopping parent process [176489]

@@ -7,6 +7,8 @@ from app.database.session import get_db
 from app.models.orders import Order
 from app.schemas.orders import OrderCreateSchema  
 import razorpay
+from sqlalchemy.orm import joinedload
+
 from fastapi.responses import HTMLResponse , RedirectResponse
 # from fastapi import RedirectResponse
 from fastapi import Request
@@ -80,7 +82,10 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
 
         # Create order
         new_order = Order(
+
             user_id=user["id"],
+            name=user["name"],          # store snapshot of name
+            phone=user["phone"],
             address=address,
             items=items,
             total_amount=total_amount,
@@ -109,27 +114,30 @@ def orders_page(request: Request):
 
 
 
-
 @router.get("/api/orders")
 async def get_order_details(user_id: int, db: Session = Depends(get_db)):
-    # print("User ID:", user_id)
-    orders = db.query(Order).filter(
-        Order.user_id == user_id
-    ).all()
-    # print("Orders:", orders)
-    
+    orders = (
+        db.query(Order)
+        .options(joinedload(Order.user))  # This preloads the related User
+        .filter(Order.user_id == user_id)
+        .all()
+    )
+
     if not orders:
         return {
             "data": [],
             "message": "No orders found"
         }
-    
+
     order_list = []
     for order in orders:
         order_data = {
             "id": order.id,
             "razorpay_order_id": order.razorpay_order_id,
             "user_id": order.user_id,
+            "name": f"{order.user.first_name} {order.user.last_name}".strip() if order.user else None,
+            "phone": order.user.mobile_number if order.user else None,
+
             "total_amount": float(order.total_amount) if order.total_amount else 0.0,
             "order_status": order.order_status,
             "created_at": order.created_at.isoformat() if order.created_at else None,
@@ -137,8 +145,9 @@ async def get_order_details(user_id: int, db: Session = Depends(get_db)):
             "address": order.address if order.address else {}
         }
         order_list.append(order_data)
-    
+
     return {
         "data": order_list,
         "message": "Orders fetched successfully"
     }
+

@@ -1,8 +1,8 @@
 export interface Order {
   id: number
   razorpay_order_id: string
-  customer_name: string | null
-  phone_number: string | null
+  name: string | null
+  phone: string | null
   created_at: string
   total_amount: number
   order_status: OrderStatus
@@ -38,3 +38,4 @@ export type TabType =
   | "completed"
   | "rejected"
   | "all"
+

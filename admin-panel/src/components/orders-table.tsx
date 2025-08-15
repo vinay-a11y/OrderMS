@@ -80,16 +80,16 @@ export function OrdersTable({
   // Status badge styling
   const getStatusBadge = (status: OrderStatus) => {
     const variants = {
-      placed: "bg-yellow-100 text-yellow-800",
-      confirmed: "bg-green-100 text-green-800",
-      inprocess: "bg-blue-100 text-blue-800",
-      dispatched: "bg-orange-100 text-orange-800",
-      delivered: "bg-purple-100 text-purple-800",
-      completed: "bg-emerald-100 text-emerald-800",
-      rejected: "bg-red-100 text-red-800",
+      placed: "bg-gradient-to-r from-yellow-500 to-yellow-600 text-white shadow-sm",
+      confirmed: "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-sm",
+      inprocess: "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm",
+      dispatched: "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-sm",
+      delivered: "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-sm",
+      completed: "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-sm",
+      rejected: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-sm",
     }
 
-    return <Badge className={`${variants[status]} border-0 font-semibold uppercase text-xs`}>{status}</Badge>
+    return <Badge className={`${variants[status]} border-0 font-semibold uppercase text-xs px-3 py-1`}>{status}</Badge>
   }
 
   // Action buttons based on order status
@@ -102,13 +102,18 @@ export function OrdersTable({
           <Button
             key="confirm"
             size="sm"
-            className="bg-blue-600 hover:bg-blue-700 text-white"
+            className="bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-sm"
             onClick={() => onStatusUpdate(order.id, "confirmed")}
           >
             <Check className="h-3 w-3 mr-1" />
             Confirm
           </Button>,
-          <Button key="reject" size="sm" variant="destructive" onClick={() => onStatusUpdate(order.id, "rejected")}>
+          <Button
+            key="reject"
+            size="sm"
+            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white shadow-sm"
+            onClick={() => onStatusUpdate(order.id, "rejected")}
+          >
             <X className="h-3 w-3 mr-1" />
             Reject
           </Button>,
@@ -119,7 +124,7 @@ export function OrdersTable({
           <Button
             key="process"
             size="sm"
-            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-sm"
             onClick={() => onStatusUpdate(order.id, "inprocess")}
           >
             <Cog className="h-3 w-3 mr-1" />
@@ -132,7 +137,7 @@ export function OrdersTable({
           <Button
             key="dispatch"
             size="sm"
-            className="bg-orange-600 hover:bg-orange-700 text-white"
+            className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-sm"
             onClick={() => onStatusUpdate(order.id, "dispatched")}
           >
             <Truck className="h-3 w-3 mr-1" />
@@ -145,7 +150,7 @@ export function OrdersTable({
           <Button
             key="deliver"
             size="sm"
-            className="bg-purple-600 hover:bg-purple-700 text-white"
+            className="bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white shadow-sm"
             onClick={() => onStatusUpdate(order.id, "delivered")}
           >
             <Package className="h-3 w-3 mr-1" />
@@ -158,7 +163,7 @@ export function OrdersTable({
           <Button
             key="complete"
             size="sm"
-            className="bg-emerald-600 hover:bg-emerald-700 text-white"
+            className="bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white shadow-sm"
             onClick={() => onStatusUpdate(order.id, "completed")}
           >
             <Flag className="h-3 w-3 mr-1" />
@@ -169,7 +174,7 @@ export function OrdersTable({
       case "completed":
       case "rejected":
         buttons.push(
-          <span key="no-action" className="text-slate-500 text-sm">
+          <span key="no-action" className="text-slate-500 text-sm px-3 py-1 bg-slate-100 rounded-lg">
             No actions
           </span>,
         )
@@ -177,7 +182,13 @@ export function OrdersTable({
     }
 
     buttons.push(
-      <Button key="details" size="sm" variant="outline" onClick={() => onOrderSelect(order)}>
+      <Button
+        key="details"
+        size="sm"
+        variant="outline"
+        onClick={() => onOrderSelect(order)}
+        className="border-slate-300 text-slate-700 hover:bg-slate-50 shadow-sm"
+      >
         <Eye className="h-3 w-3 mr-1" />
         Details
       </Button>,
@@ -199,9 +210,9 @@ export function OrdersTable({
 
   if (isLoading) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
         <div className="flex flex-col items-center justify-center py-12">
-          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-purple-600 mb-4"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
           <p className="text-slate-600">Loading orders...</p>
         </div>
       </div>
@@ -210,9 +221,11 @@ export function OrdersTable({
 
   if (orders.length === 0) {
     return (
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-8">
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8">
         <div className="text-center py-12">
-          <div className="text-6xl mb-4">📦</div>
+          <div className="w-16 h-16 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Package className="h-8 w-8 text-blue-600" />
+          </div>
           <h3 className="text-xl font-semibold text-slate-700 mb-2">No orders found</h3>
           <p className="text-slate-500">Try adjusting your search criteria or check a different tab.</p>
         </div>
@@ -223,10 +236,10 @@ export function OrdersTable({
   return (
     <div className="space-y-6">
       {/* Table */}
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+      <div className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
         <div className="overflow-x-auto">
-<table className="w-full text-[14px]">
-            <thead className="bg-slate-50 border-b border-slate-200">
+          <table className="w-full text-[14px]">
+            <thead className="bg-gradient-to-r from-slate-50 to-slate-100 border-b border-slate-200">
               <tr>
                 <th className="px-6 py-4 text-left">
                   <Checkbox ref={selectAllRef} checked={allCurrentPageSelected} onCheckedChange={handleSelectAll} />
@@ -243,7 +256,10 @@ export function OrdersTable({
             </thead>
             <tbody className="divide-y divide-slate-200">
               {paginatedOrders.map((order) => (
-                <tr key={order.id} className="hover:bg-slate-50 transition-colors">
+                <tr
+                  key={order.id}
+                  className="hover:bg-gradient-to-r hover:from-slate-50 hover:to-blue-50 transition-colors"
+                >
                   <td className="px-6 py-4">
                     <Checkbox
                       checked={selectedOrders.has(order.id)}
@@ -252,14 +268,16 @@ export function OrdersTable({
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <div className="font-semibold text-purple-600">#{order.id}</div>
+                      <div className="font-semibold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        #{order.id}
+                      </div>
                       <div className="text-xs text-slate-500">{order.razorpay_order_id}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <div className="font-medium text-slate-900">{order.customer_name || "N/A"}</div>
-                      <div className="text-xs text-slate-500">{order.phone_number || "N/A"}</div>
+                      <div className="font-medium text-slate-900">{order.name || "N/A"}</div>
+                      <div className="text-xs text-slate-500">{order.phone || "N/A"}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -269,22 +287,21 @@ export function OrdersTable({
                     <span className="font-semibold text-green-600">₹{order.total_amount.toLocaleString()}</span>
                   </td>
                   <td className="px-6 py-4">{getStatusBadge(order.order_status)}</td>
-                 <td className="px-6 py-4 align-top">
-  <div className="flex flex-col gap-1 text-[13px] text-slate-700 max-w-[300px]">
-    {order.items.slice(0, 3).map((item, index) => (
-      <div
-        key={index}
-        className="bg-slate-100 rounded px-2 py-[2px] inline-block whitespace-nowrap w-fit text-[13px] text-slate-700"
-      >
-        {item.name} - {item.quantity} - {item.variant}
-      </div>
-    ))}
-    {order.items.length > 3 && (
-      <div className="text-xs text-slate-400">+{order.items.length - 3} more items</div>
-    )}
-  </div>
-</td>
-
+                  <td className="px-6 py-4 align-top">
+                    <div className="flex flex-col gap-1 text-[13px] text-slate-700 max-w-[300px]">
+                      {order.items.slice(0, 3).map((item, index) => (
+                        <div
+                          key={index}
+                          className="bg-gradient-to-r from-slate-100 to-slate-200 rounded px-2 py-[2px] inline-block whitespace-nowrap w-fit text-[13px] text-slate-700 shadow-sm"
+                        >
+                          {item.name} - {item.quantity} - {item.variant}
+                        </div>
+                      ))}
+                      {order.items.length > 3 && (
+                        <div className="text-xs text-slate-400">+{order.items.length - 3} more items</div>
+                      )}
+                    </div>
+                  </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-slate-600 max-w-[200px] leading-tight">
                       {order.address.line1}
@@ -304,7 +321,7 @@ export function OrdersTable({
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 px-6 py-4">
+        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 px-6 py-4">
           <div className="flex justify-between items-center">
             <div className="text-sm text-slate-600">
               Showing {startIndex + 1}-{Math.min(endIndex, orders.length)} of {orders.length} orders
@@ -315,6 +332,7 @@ export function OrdersTable({
                 size="sm"
                 onClick={() => onPageChange(currentPage - 1)}
                 disabled={currentPage === 1}
+                className="border-slate-300 text-slate-700 hover:bg-slate-50"
               >
                 Previous
               </Button>
@@ -328,7 +346,11 @@ export function OrdersTable({
                       variant={currentPage === page ? "default" : "outline"}
                       size="sm"
                       onClick={() => onPageChange(page)}
-                      className={currentPage === page ? "bg-purple-600 hover:bg-purple-700" : ""}
+                      className={
+                        currentPage === page
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-sm"
+                          : "border-slate-300 text-slate-700 hover:bg-slate-50"
+                      }
                     >
                       {page}
                     </Button>
@@ -341,6 +363,7 @@ export function OrdersTable({
                 size="sm"
                 onClick={() => onPageChange(currentPage + 1)}
                 disabled={currentPage === totalPages}
+                className="border-slate-300 text-slate-700 hover:bg-slate-50"
               >
                 Next
               </Button>
@@ -351,3 +374,4 @@ export function OrdersTable({
     </div>
   )
 }
+

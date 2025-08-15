@@ -14,7 +14,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
             justify-content: center;
             padding: 2rem 0;
             position: relative;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         /* ===== ANIMATED BACKGROUND ===== */
@@ -90,7 +90,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
 
         /* ===== LEFT PANEL ===== */
         .register-left {
-            background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 50%, #8e44ad 100%);
+background: linear-gradient(135deg, #711c77 0%, #8e44ad 50%, #a21878 100%);
             color: white;
             padding: 3rem;
             display: flex;
@@ -170,7 +170,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
             padding-right: 1rem;
             flex: 1;
             scrollbar-width: thin;
-            scrollbar-color: #9b59b6 #f1f1f1;
+            scrollbar-color:  #f1f1f1;
         }
 
         .register-right-content::-webkit-scrollbar {
@@ -183,7 +183,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .register-right-content::-webkit-scrollbar-thumb {
-            background: #9b59b6;
+            background: #a21878;
             border-radius: 10px;
         }
         .register-right .logo {
@@ -234,7 +234,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .form-section-title i {
-            color: #9b59b6;
+            color: #a21878;
         }
 
         .form-row {
@@ -311,7 +311,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         .form-group select:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: #9b59b6;
+            border-color: #a21878;
             box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
         }
 
@@ -328,7 +328,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .password-toggle:hover {
-            color: #6a4c93;
+            color: a21878;
         }
 
         .password-strength {
@@ -357,7 +357,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
 
         .strength-weak .strength-fill {
             width: 33%;
-            background: #9b59b6;
+            background: #a21878;
         }
 
         .strength-medium .strength-fill {
@@ -386,7 +386,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
             width: 18px;
             height: 18px;
             margin-top: 0.2rem;
-            accent-color: #9b59b6;
+            accent-color: #a21878;
         }
 
         .terms-checkbox label {
@@ -397,7 +397,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .terms-checkbox a {
-            color: #9b59b6;
+            color: #a21878;
             text-decoration: none;
             font-weight: 500;
         }
@@ -408,7 +408,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
 
         /* ===== BUTTONS ===== */
         .register-btn {
-  background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 100%);
+          background: linear-gradient(135deg, #a21878 50%, #a21878 100%);
             color: white;
             border: none;
             padding: 15px;
@@ -480,7 +480,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
 
         .otp-input:focus {
             outline: none;
-            border-color: #6a4c93;
+            border-color: a21878;
             background: white;
             box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
         }
@@ -519,13 +519,13 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .phone-display i {
-            color: #9b59b6;
+            color: #a21878;
         }
 
         .timer {
             text-align: center;
             font-size: 1.1rem;
-            color: #9b59b6;
+            color: #a21878;
             margin: 1.5rem 0;
             font-weight: 600;
             display: flex;
@@ -539,7 +539,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .timer.warning {
-            color: #9b59b6;
+            color: #a21878;
         }
 
         .timer.danger {
@@ -656,14 +656,14 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .login-link a {
-            color: #9b59b6;
+            color: #a21878;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
         }
 
         .login-link a:hover {
-            color: #6a4c93;
+            color: a21878;
             text-decoration: underline;
         }
 
@@ -700,7 +700,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         .resend-btn {
             background: none;
             border: none;
-            color: #6a4c93;
+            color: a21878;
             font-size: 1rem;
             cursor: pointer;
             text-decoration: underline;
@@ -712,7 +712,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
         }
 
         .resend-btn:hover {
-            color: #9b59b6;
+            color: #a21878;
         }
 
         .resend-btn:disabled {
@@ -738,8 +738,9 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
                 scroll-behavior: smooth;
               }
             .register-container {
+                             margin-top: 0%;
+
                 grid-template-columns: 1fr;
-                margin: 1rem;
                 max-width: 500px;
                 height: auto;
                 max-height: none;
@@ -752,7 +753,7 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
 
             .register-right {
                 padding: 1.5rem;
-                max-height: 80vh;
+                max-height: 100vh;
                 overflow-y: auto;
             }
 
@@ -816,3 +817,4 @@ background: linear-gradient(135deg, #cccccc, #ffffff);
                 max-width: 100%;   /* prevent overflow */
               }
         }
+

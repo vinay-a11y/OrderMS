@@ -2,43 +2,36 @@
 
 import { useState } from "react"
 import { Navbar } from "./navbar"
+import { DashboardSection } from "./dashboard-section"
 import { OrdersSection } from "./orders-section"
 import { ProductsSection } from "./products-section"
 import { KitchenSection } from "./kitchen-section"
-import { ToastContainer } from "./toast-container"
 
-export type SectionType = "dashboard" | "orders" | "products" | "kitchen" | "customers" | "analytics" | "settings"
+import type { ActiveSection } from "@/types/admin"
 
-export function AdminDashboard() {
-  const [currentSection, setCurrentSection] = useState<SectionType>("orders")
+interface AdminDashboardProps {
+  user: { email: string; token: string }
+  onExit: () => void
+}
 
-  const renderSection = () => {
-    switch (currentSection) {
-      case "orders":
-        return <OrdersSection />
-      case "products":
-        return <ProductsSection />
-      case "kitchen":
-        return <KitchenSection />
-      default:
-        return (
-          <div className="min-h-screen flex items-center justify-center">
-            <div className="text-center">
-              <h2 className="text-2xl font-bold text-slate-700 mb-2">
-                {currentSection.charAt(0).toUpperCase() + currentSection.slice(1)} Section
-              </h2>
-              <p className="text-slate-500">Coming soon!</p>
-            </div>
-          </div>
-        )
-    }
-  }
+export function AdminDashboard({ user, onExit }: AdminDashboardProps) {
+  const [activeSection, setActiveSection] = useState<ActiveSection>("dashboard")
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Navbar currentSection={currentSection} onSectionChange={setCurrentSection} />
-      <main className="pt-[70px]">{renderSection()}</main>
-      <ToastContainer />
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+      <Navbar
+        activeSection={activeSection}
+        onSectionChange={setActiveSection}
+        onExit={onExit}
+      />
+      
+      <main className="transition-all duration-300 ease-in-out">
+        {activeSection === "dashboard" && <DashboardSection />}
+        {activeSection === "orders" && <OrdersSection />}
+        {activeSection === "products" && <ProductsSection />}
+        {activeSection === "kitchen" && <KitchenSection />}
+      </main>
     </div>
   )
 }
+

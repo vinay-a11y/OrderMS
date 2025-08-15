@@ -2196,3 +2196,4 @@ window.showProductDetails = showProductDetails
 window.showEditProductModal = showEditProductModal
 window.showAddProductModal = showAddProductModal
 window.deleteProduct = deleteProduct
+

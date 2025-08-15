@@ -90,7 +90,7 @@ body.modal-open {
 
 /* Header Styles */
 .header {
-  background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 50%, #8e44ad 100%);
+background: linear-gradient(135deg, #711c77 0%, #8e44ad 50%, #a21878 100%);
   color: #fff;
   position: fixed;
   width: 100%;
@@ -221,7 +221,7 @@ body.modal-open {
 }
 
 .search-button {
-  background: linear-gradient(135deg, #6a4c93 0%, #9b59b6 100%);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
   border: none;
   padding: 0 1.2rem;
@@ -232,7 +232,7 @@ body.modal-open {
 }
 
 .search-button:hover {
-  background: linear-gradient(135deg, #8e44ad, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   transform: scale(1.05);
 }
 
@@ -313,7 +313,7 @@ body.modal-open {
 .user-avatar {
   width: 45px;
   height: 45px;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -445,7 +445,7 @@ body.modal-open {
   font-size: 1.6rem;
   font-weight: 700;
   color: #333;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -527,7 +527,7 @@ body.modal-open {
 
 .item-image .placeholder {
   font-size: 2.5rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -602,12 +602,12 @@ body.modal-open {
 }
 
 .quantity-btn:not(.decrease) {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
 }
 
 .quantity-btn:not(.decrease):hover {
-  background: linear-gradient(135deg, #8e44ad, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   transform: scale(1.1);
 }
 
@@ -653,14 +653,14 @@ body.modal-open {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
 .change-address-btn {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -675,7 +675,7 @@ body.modal-open {
 }
 
 .change-address-btn:hover {
-  background: linear-gradient(135deg, #8e44ad, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(106, 76, 147, 0.3);
 }
@@ -747,7 +747,7 @@ body.modal-open {
   align-items: center;
   gap: 0.5rem;
   background: rgba(106, 76, 147, 0.1);
-  color: #6a4c93;
+  color:#a21878  ;
   padding: 0.75rem 1rem;
   border-radius: 12px;
   font-weight: 600;
@@ -828,7 +828,7 @@ body.modal-open {
   font-size: 1.5rem;
   font-weight: 700;
   color: #333;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -909,7 +909,8 @@ body.modal-open {
 
 .form-group input:focus,
 .form-group select:focus {
-  border-color: #9b59b6;
+  border-color:  #a21878
+;
   box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.1);
 }
 
@@ -948,14 +949,16 @@ body.modal-open {
 }
 
 .saved-address-item:hover {
-  border-color: #9b59b6;
+  border-color:  #a21878
+;
   background: linear-gradient(135deg, rgba(106, 76, 147, 0.02), rgba(155, 89, 182, 0.02));
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .saved-address-item.selected {
-  border-color: #9b59b6;
+  border-color:  #a21878
+;
   background: linear-gradient(135deg, rgba(106, 76, 147, 0.05), rgba(155, 89, 182, 0.05));
   box-shadow: 0 8px 25px rgba(106, 76, 147, 0.2);
 }
@@ -1055,7 +1058,7 @@ body.modal-open {
   color: #333;
   margin-bottom: 2rem;
   text-align: center;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1185,7 +1188,7 @@ body.modal-open {
 
 .empty-cart-icon {
   font-size: 5rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1221,7 +1224,7 @@ body.modal-open {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   color: white;
   text-decoration: none;
   padding: 1.25rem 2.5rem;
@@ -1234,7 +1237,7 @@ body.modal-open {
 }
 
 .browse-products-btn:hover {
-  background: linear-gradient(135deg, #8e44ad, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   transform: translateY(-3px);
   box-shadow: 0 12px 30px rgba(106, 76, 147, 0.4);
 }
@@ -1252,7 +1255,7 @@ body.modal-open {
 
 .loading i {
   font-size: 3.5rem;
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -1271,8 +1274,9 @@ body.modal-open {
 
 /* Footer */
 .footer {
+  background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
+
   position: relative;
-  background: linear-gradient(135deg, #2d1b69 0%, #6a4c93 100%);
   color: white;
   margin-top: 4rem;
   overflow: hidden;
@@ -1331,7 +1335,8 @@ body.modal-open {
   left: 0;
   width: 30px;
   height: 3px;
-  background: linear-gradient(135deg, #9b59b6, #e74c3c);
+ background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
+
   border-radius: 2px;
 }
 
@@ -1374,7 +1379,8 @@ body.modal-open {
 }
 
 .social-link:hover {
-  background: linear-gradient(135deg, #9b59b6, #e74c3c);
+  background: linear-gradient(135deg,  #a21878
+, #e74c3c);
   transform: translateY(-2px);
 }
 
@@ -1394,7 +1400,8 @@ body.modal-open {
 }
 
 .footer-section ul li a:hover {
-  color: #9b59b6;
+  color:  #a21878
+;
   padding-left: 0.5rem;
 }
 
@@ -1414,7 +1421,8 @@ body.modal-open {
 
 .contact-item i {
   width: 18px;
-  color: #9b59b6;
+  color:  #a21878
+;
 }
 
 .footer-bottom {
@@ -1451,7 +1459,8 @@ body.modal-open {
 }
 
 .footer-links a:hover {
-  color: #9b59b6;
+  color:  #a21878;
+;
 }
 
 /* Custom scrollbar */
@@ -1465,7 +1474,7 @@ body.modal-open {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   border-radius: 4px;
 }
 
@@ -1479,7 +1488,7 @@ body.modal-open {
 }
 
 .address-modal-content::-webkit-scrollbar-thumb {
-  background: linear-gradient(135deg, #6a4c93, #9b59b6);
+background: linear-gradient(135deg, #711c77 50%, #a21878 100%);
   border-radius: 3px;
 }
 
@@ -1743,3 +1752,4 @@ body.modal-open {
     transition-duration: 0.01ms !important;
   }
 }
+
