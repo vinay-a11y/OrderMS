@@ -84,8 +84,7 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
         new_order = Order(
 
             user_id=user["id"],
-            name=user["name"],          # store snapshot of name
-            phone=user["phone"],
+                # store snapshot of name
             address=address,
             items=items,
             total_amount=total_amount,
