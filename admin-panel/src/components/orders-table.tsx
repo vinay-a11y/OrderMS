@@ -247,6 +247,7 @@ export function OrdersTable({
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Order ID</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Customer & Phone</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Date</th>
+                <th className="px-6 py-4 text-left font-semibold text-slate-700">Expected-Date</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Amount</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Status</th>
                 <th className="px-6 py-4 text-left font-semibold text-slate-700">Items [Item, Qty, Variant]</th>
@@ -283,6 +284,12 @@ export function OrdersTable({
                   <td className="px-6 py-4">
                     <span className="text-slate-600 text-sm">{formatDate(order.created_at)}</span>
                   </td>
+                  <td className="px-6 py-4">
+  <span className="text-slate-600 text-sm">
+    {formatDate(order.delivery_date ?? "")}
+  </span>
+</td>
+
                   <td className="px-6 py-4">
                     <span className="font-semibold text-green-600">₹{order.total_amount.toLocaleString()}</span>
                   </td>

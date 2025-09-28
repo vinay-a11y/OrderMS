@@ -52,6 +52,7 @@ async def create_order(data: dict):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
 @router.post("/verify-payment/")
 async def verify_payment(request: Request, db: Session = Depends(get_db)):
     try:
@@ -72,16 +73,19 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
 
         # Extracting order data
         user = data.get("user_details")
-        if (user):
-            user_deets= db.query(User).filter(User.id == user["id"]).first()
+        if user:
+            user_deets = db.query(User).filter(User.id == user["id"]).first()
         address = data.get("delivery_address")
         items = data.get("items")
         total_amount = data.get("amount")
+        delivery_date = data.get("delivery_date")  # <-- Step 2: Extract delivery date
 
-        if not all([user, address, items, total_amount]):
+        if not all([user, address, items, total_amount, delivery_date]):
             raise HTTPException(status_code=400, detail="Missing order fields.")
+
         print("User:", user)
-        # Create order
+
+        # Step 3: Create order with delivery_date
         new_order = Order(
             user_id=user["id"],
             first_name=user_deets.first_name,  # store snapshot of name
@@ -91,17 +95,22 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
             total_amount=total_amount,
             razorpay_order_id=data["order_id"],
             order_status="placed",
+            delivery_date=datetime.strptime(delivery_date, "%Y-%m-%d") if delivery_date else None,
             created_at=datetime.now(),
         )
+
         db.add(new_order)
         db.commit()
         db.refresh(new_order)
         return {"status": "success", "order_id": new_order.id}
+
     except HTTPException as e:
         raise e
     except Exception as e:
         print("Unexpected error:", str(e))
         raise HTTPException(status_code=500, detail="Internal Server Error")
+
+
 @router.get("/orders.html", response_class=HTMLResponse)
 def orders_page(request: Request):
      if request.cookies.get("logged_in") != "true":
@@ -133,7 +142,7 @@ async def get_order_details(user_id: int, db: Session = Depends(get_db)):
             "user_id": order.user_id,
             "name": f"{order.user.first_name} {order.user.last_name}".strip() if order.user else None,
             "phone": order.user.mobile_number if order.user else None,
-
+            "delivery_date": order.delivery_date.isoformat() if order.delivery_date else None,
             "total_amount": float(order.total_amount) if order.total_amount else 0.0,
             "order_status": order.order_status,
             "created_at": order.created_at.isoformat() if order.created_at else None,

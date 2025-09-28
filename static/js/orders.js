@@ -565,8 +565,8 @@ function openOrderModal(orderId) {
           <span class="detail-value">${orderDate}</span>
         </div>
         <div class="detail-row">
-          <span class="detail-label">Last Updated:</span>
-          <span class="detail-value">${updatedDate}</span>
+          <span class="detail-label">Expected Delivery:</span>
+          <span class="detail-value">${order.delivery_date ? formatDate(order.delivery_date) : "N/A"}</span>
         </div>
         <div class="detail-row">
           <span class="detail-label">Status:</span>

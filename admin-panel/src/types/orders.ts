@@ -4,6 +4,7 @@ export interface Order {
   first_name: string | null
   mobile_number: string | null
   created_at: string
+  delivery_date: string | null
   total_amount: number
   order_status: OrderStatus
   items: OrderItem[]

@@ -3,100 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - SnackMart</title>
+    <title>Shopping Cart - GokhaleBandhu</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <link rel="stylesheet" href="/static/css/cart.css" />
 </head>
 <body>
-    <!-- Toast Container -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <!-- Header Section -->
     <header class="header" id="header">
-        <div class="header-container">
+        <div class="mobile-navbar mobile-only">
+            <button class="back-btn" onclick="window.location.href='/'">
+                <i class="fas fa-arrow-left" style="color: #ffffff;"></i>
+            </button>
+<span class="mobile-brand-text" style="color: #ffd700;">My Cart</span>
+            <div class="mobile-actions">
+                
+                <div class="mobile-dropdown" id="mobileDropdown">
+                    <a href="/orders" class="mobile-dropdown-item">
+                        <i class="fas fa-receipt"></i>
+                        <span>My Orders</span>
+                    </a>
+                    <a href="/address" class="mobile-dropdown-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Addresses</span>
+                    </a>
+                    <button class="mobile-dropdown-item" onclick="confirmLogout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="header-container desktop-only">
             <div class="top-header">
-                <!-- Logo with Welcome Message -->
                 <div class="logo-section">
                     <a href="/" class="logo">
-                        <img src="static/images/logo.png" alt="SnackMart Logo">
+                        <img src="/static/images/logo.png" alt="GokhaleBandhu Logo">
                     </a>
                     <div class="welcome-message" id="welcomeMessage">
                         <span class="welcome-text">Welcome to</span>
-                        <span class="brand-name">Gokhale Bandu</span>
+                        <span class="brand-name">GokhaleBandhu</span>
                     </div>
                 </div>
 
-                <!-- Delivery Info -->
                 <div class="delivery-info">
                     <span class="delivery-label">Home Delivery Available</span>
                     <span class="delivery-time">8:00 AM - 10:00 PM</span>
                 </div>
 
-                <!-- Search Container -->
                 <div class="search-container">
                     <div class="search-wrapper">
-                        <input type="text" placeholder="Search for snacks..." class="search-input" id="searchBox">
+                        <input type="text" placeholder="Search for products..." class="search-input" id="searchBox">
                         <button class="search-button" onclick="performSearch()">
                             <i class="fas fa-search"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- User Actions -->
                 <div class="user-actions">
-                    <!-- Products Link -->
                     <a href="/product" class="nav-link">
                         <i class="fas fa-th-large"></i>
                         <span>All Products</span>
                     </a>
 
-                    <!-- Auth Container -->
-                    <div class="auth-container">
-                        <!-- <a href="#" class="nav-link" id="authButton" onclick="toggleAuth()">
-                            <i class="fas fa-user"></i>
-                            <span id="authText">Sign In</span>
-                        </a> -->
-
-                        <!-- User Dropdown -->
-                        <div class="user-dropdown" id="userDropdown">
-                            <div class="dropdown-header">
-                                <div class="user-avatar">
-                                    <i class="fas fa-user-circle"></i>
-                                </div>
-                                <div class="user-info">
-                                    <span class="user-name" id="dropdownUserName">Guest User</span>
-                                    <span class="user-email" id="dropdownUserEmail">guest@example.com</span>
-                                </div>
-                            </div>
-                            <div class="dropdown-menu">
-                                <a href="/orders" class="dropdown-item">
-                                    <i class="fas fa-receipt"></i>
-                                    <span>My Orders</span>
-                                </a>
-                                <a href="/address" class="dropdown-item">
-                                    <i class="fas fa-map-marker-alt"></i>
-                                    <span>Addresses</span>
-                                </a>
-                                <div class="dropdown-divider"></div>
-                                <button class="dropdown-item logout-item" onclick="confirmLogout()">
-                                    <i class="fas fa-sign-out-alt"></i>
-                                    <span>Logout</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                   
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="main-content">
         <div class="container">
             <div id="cartContent">
-                <!-- Cart content will be loaded here -->
                 <div class="loading">
                     <i class="fas fa-spinner fa-spin"></i>
                     <p>Loading your cart...</p>
@@ -105,7 +86,6 @@
         </div>
     </main>
 
-    <!-- Enhanced Footer -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-wave">
@@ -120,9 +100,9 @@
                     <div class="footer-section">
                         <div class="footer-logo">
                             <span class="logo-icon">🍪</span>
-                            <span class="logo-text">SnackMart</span>
+                            <span class="logo-text">GokhaleBandhu</span>
                         </div>
-                        <p class="footer-description">Your favorite snacks delivered fresh to your doorstep. Quality guaranteed, happiness delivered!</p>
+                        <p class="footer-description">Your favorite products delivered fresh to your doorstep. Quality guaranteed, happiness delivered!</p>
                         <div class="social-links">
                             <a href="#" class="social-link"><i class="fab fa-facebook-f"></i></a>
                             <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
@@ -160,7 +140,7 @@
                             </div>
                             <div class="contact-item">
                                 <i class="fas fa-envelope"></i>
-                                <span>support@snackmart.com</span>
+                                <span>support@gokhalebandhu.com</span>
                             </div>
                             <div class="contact-item">
                                 <i class="fas fa-clock"></i>
@@ -172,7 +152,7 @@
                 
                 <div class="footer-bottom">
                     <div class="footer-bottom-content">
-                        <p>&copy; 2024 SnackMart. All rights reserved. Made with ❤ for snack lovers</p>
+                        <p>&copy; 2025 GokhaleBandhu. All rights reserved. Made with ❤ for our customers</p>
                         <div class="footer-links">
                             <a href="/privacy">Privacy Policy</a>
                             <a href="/terms">Terms of Service</a>
@@ -185,7 +165,5 @@
     </footer>
 
     <script src="/static/js/cart.js"></script>
-        <script src="/static/js/products.js"></script>
-
 </body>
 </html>

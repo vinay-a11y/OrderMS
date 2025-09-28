@@ -1,5 +1,5 @@
 # models.py (or wherever Order is defined)
-from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, JSON, func
+from sqlalchemy import Column, Integer, Float, String, ForeignKey, DateTime, JSON, func,Date
 from sqlalchemy.orm import relationship
 from app.database.session import Base
 
@@ -10,6 +10,8 @@ class Order(Base):
     user_id = Column(Integer, ForeignKey("users.id"))
     first_name = Column(String(100), nullable=True)   # NEW
     mobile_number = Column(String(20), nullable=True)   # NEW
+    delivery_date = Column(Date, nullable=True)
+
     address = Column(JSON)
     items = Column(JSON)
     total_amount = Column(Float)

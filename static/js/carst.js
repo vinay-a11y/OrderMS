@@ -281,12 +281,11 @@ function loadCart() {
         <div class="cart-header">
           <h2 class="cart-title">
             Shopping Cart (${cart.reduce((sum, item) => sum + item.quantity, 0)} item${cart.reduce((sum, item) => sum + item.quantity, 0) !== 1 ? "s" : ""})
+          </h2>
           <button class="remove-all-btn" onclick="clearCart()">
             <i class="fas fa-trash"></i>
             Remove all
           </button>
-            </h2>
-          
         </div>
 
         <div class="cart-items">
