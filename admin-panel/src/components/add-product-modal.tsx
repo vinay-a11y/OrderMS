@@ -82,7 +82,7 @@ export function AddProductModal({ isOpen, onClose, onSuccess }: AddProductModalP
 
       console.log("Sending product data:", productData)
 
-      const res = await fetch("/api/products/add", {
+      const res = await fetch("http://localhost:8000/api/products/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

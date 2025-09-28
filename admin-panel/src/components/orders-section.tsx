@@ -15,7 +15,7 @@ const CONFIG = {
   ORDERS_PER_PAGE: 20,
   RECENT_DAYS_FILTER: 10,
   SEARCH_DEBOUNCE_DELAY: 300,
-  API_BASE_URL: "/api/admin/orders",
+  API_BASE_URL: "http://localhost:8000/api/admin/orders",
   AUTO_REFRESH_INTERVAL: 30000,
 }
 
@@ -43,7 +43,7 @@ export function OrdersSection() {
       try {
         if (!silent) setIsLoading(true)
 
-const response = await fetch("/api/admin/orders", {
+const response = await fetch("http://localhost:8000/api/admin/orders", {
           credentials: "include",
         })
 

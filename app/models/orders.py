@@ -8,8 +8,8 @@ class Order(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
-    name = Column(String(100), nullable=True)   # NEW
-    phone = Column(String(20), nullable=True)   # NEW
+    first_name = Column(String(100), nullable=True)   # NEW
+    mobile_number = Column(String(20), nullable=True)   # NEW
     address = Column(JSON)
     items = Column(JSON)
     total_amount = Column(Float)

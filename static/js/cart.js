@@ -4,6 +4,20 @@ let userDetails = {}
 let selectedAddress = null
 let savedAddresses = []
 
+const pincodes = {
+  "available": [
+    "411032","411046","411051","411007","411027","411002","411045",
+    "411007","411021","411042","411042","411038","411004","411052",
+    "411011","411046","413130","411003","411038","411030","411011",
+    "411037","411016","411028","411036","411048","411002","411041",
+    "411030","411052","411009","411009","412108","410512","412303",
+    "411017","411001","411001","411002","411001","411001","411020",
+    "411011","411002","411030","411030","411037","411027","411030",
+    "411016","411005","411023","411002","411021","411042","411042",
+    "411037","412106","411041","411015","411057","411058","411006"
+  ]
+};
+
 // Initialize page
 document.addEventListener("DOMContentLoaded", () => {
   loadUserDetails()
@@ -24,8 +38,7 @@ async function loadUserDetails() {
     // Set default user structure
     userDetails = {
       id: 1, // Default ID if no user
-      first_name: "Guest User",
-      mobile_number: "9999999999",
+      
     }
   }
 }
@@ -153,6 +166,7 @@ async function addToCart(productId, productData) {
     updateCartCount()
   }
 }
+
 
 // Load and render cart
 function loadCart() {
@@ -349,10 +363,14 @@ function loadCart() {
                 <label for="state">State *</label>
                 <input type="text" id="state" placeholder="Enter state">
               </div>
-              <div class="form-group">
-                <label for="pincode">Pincode *</label>
-                <input type="text" id="pincode" placeholder="Enter pincode">
-              </div>
+             <div class="form-group full-width">
+  <h4>Check Pincode Availability</h4>
+
+  <div style="display: flex; align-items: center; gap: 10px;">
+    <input type="text" id="pincodeInput" placeholder="Enter pincode" oninput="checkPincode()">
+    <span id="pincodeStatus"></span>
+  </div>
+</div>
               <div class="form-group">
                 <label for="addressType">Address Type</label>
                 <select id="addressType">
@@ -380,6 +398,26 @@ function loadCart() {
     </div>
   </div>
 `
+}
+
+function checkPincode() {
+  const userInput = document.getElementById("pincodeInput").value.trim();
+  const status = document.getElementById("pincodeStatus");
+
+  if (!status) return; // avoid null error
+
+  if (userInput === "") {
+    status.innerHTML = "";
+    return;
+  }
+
+  if (pincodes.available.includes(userInput)) {
+    status.innerHTML = "✅";
+    status.style.color = "green";
+  } else {
+    status.innerHTML = "❌";
+    status.style.color = "red";
+  }
 }
 
 // Render selected address
@@ -552,7 +590,7 @@ async function addNewAddress() {
   const line2 = document.getElementById("addressLine2").value.trim()
   const city = document.getElementById("city").value.trim()
   const state = document.getElementById("state").value.trim()
-  const pincode = document.getElementById("pincode").value.trim()
+  const pincode = document.getElementById("pincodeInput").value.trim()
   const type = document.getElementById("addressType").value
 
   // Validation
@@ -610,7 +648,7 @@ async function addNewAddress() {
       document.getElementById("addressLine2").value = ""
       document.getElementById("city").value = ""
       document.getElementById("state").value = ""
-      document.getElementById("pincode").value = ""
+      document.getElementById("pincodeInput").value = ""
 
       // Update UI
       document.getElementById("savedAddressesList").innerHTML = renderSavedAddresses()
@@ -823,7 +861,7 @@ async function proceedToCheckout() {
       userDetails: {
         id: userDetails.id,
         name: userDetails.first_name || "Customer",
-        phone: userDetails.mobile_number || "9999999999",
+        phone: userDetails.mobile_number  ,
         email: userDetails.email || "customer@example.com"
       },
       deliveryAddress: selectedAddress,
@@ -898,13 +936,13 @@ async function proceedToCheckout() {
       prefill: {
         name: userDetails.first_name || "Customer",
         email: userDetails.email || "customer@example.com",
-        contact: userDetails.mobile_number || "9999999999",
+        contact: userDetails.phone  ,
       },
       theme: {
         color: "#9b59b6",
       },
       modal: {
-        ondismiss: () => {
+        ondismiss: () => {  
           // Reset button when payment modal is closed
           checkoutBtn.innerHTML = originalText
           checkoutBtn.disabled = false

@@ -1,7 +1,6 @@
 "use client"
 
 import type React from "react"
-
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -110,7 +109,7 @@ export function EditProductModal({ isOpen, product, onClose, onSuccess }: EditPr
 
       console.log("Updating product:", product.id, productData)
 
-      const res = await fetch(`http://139.59.2.94:8000/api/products/${product.id}`, {
+      const res = await fetch(`http://localhost:8000/api/products/${product.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

@@ -8,7 +8,7 @@ from app.models.orders import Order
 from app.schemas.orders import OrderCreateSchema  
 import razorpay
 from sqlalchemy.orm import joinedload
-
+from app.models.user import User
 from fastapi.responses import HTMLResponse , RedirectResponse
 # from fastapi import RedirectResponse
 from fastapi import Request
@@ -52,7 +52,6 @@ async def create_order(data: dict):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 @router.post("/verify-payment/")
 async def verify_payment(request: Request, db: Session = Depends(get_db)):
     try:
@@ -73,18 +72,20 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
 
         # Extracting order data
         user = data.get("user_details")
+        if (user):
+            user_deets= db.query(User).filter(User.id == user["id"]).first()
         address = data.get("delivery_address")
         items = data.get("items")
         total_amount = data.get("amount")
 
         if not all([user, address, items, total_amount]):
             raise HTTPException(status_code=400, detail="Missing order fields.")
-
+        print("User:", user)
         # Create order
         new_order = Order(
-
             user_id=user["id"],
-                # store snapshot of name
+            first_name=user_deets.first_name,  # store snapshot of name
+            mobile_number=user_deets.mobile_number,  # store snapshot of phone
             address=address,
             items=items,
             total_amount=total_amount,
@@ -92,19 +93,15 @@ async def verify_payment(request: Request, db: Session = Depends(get_db)):
             order_status="placed",
             created_at=datetime.now(),
         )
-
         db.add(new_order)
         db.commit()
         db.refresh(new_order)
-
         return {"status": "success", "order_id": new_order.id}
-
     except HTTPException as e:
         raise e
     except Exception as e:
         print("Unexpected error:", str(e))
         raise HTTPException(status_code=500, detail="Internal Server Error")
-
 @router.get("/orders.html", response_class=HTMLResponse)
 def orders_page(request: Request):
      if request.cookies.get("logged_in") != "true":
@@ -149,4 +146,33 @@ async def get_order_details(user_id: int, db: Session = Depends(get_db)):
         "data": order_list,
         "message": "Orders fetched successfully"
     }
+
+
+@router.patch("/cancel-order/{order_id}")
+async def cancel_order(order_id: int, db: Session = Depends(get_db)):
+    try:
+        # Fetch the order by ID
+        order = db.query(Order).filter(Order.id == order_id).first()
+        if not order:
+            raise HTTPException(status_code=404, detail="Order not found")
+
+        # Only allow cancellation if order is placed or confirmed
+        if order.order_status not in ["placed", "confirmed"]:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Cannot cancel an order that is {order.order_status}"
+            )
+
+        # Update order status to cancelled
+        order.order_status = "cancelled"
+        db.commit()
+        db.refresh(order)
+
+        return {"status": "success", "order_id": order.id, "message": "Order cancelled successfully"}
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        print("Unexpected error:", str(e))
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 

@@ -1,8 +1,8 @@
 export interface Order {
   id: number
   razorpay_order_id: string
-  name: string | null
-  phone: string | null
+  first_name: string | null
+  mobile_number: string | null
   created_at: string
   total_amount: number
   order_status: OrderStatus

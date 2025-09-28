@@ -276,8 +276,8 @@ export function OrdersTable({
                   </td>
                   <td className="px-6 py-4">
                     <div>
-                      <div className="font-medium text-slate-900">{order.name || "N/A"}</div>
-                      <div className="text-xs text-slate-500">{order.phone || "N/A"}</div>
+                      <div className="font-medium text-slate-900">{order.first_name || "N/A"}</div>
+                      <div className="text-xs text-slate-500">{order.mobile_number || "N/A"}</div>
                     </div>
                   </td>
                   <td className="px-6 py-4">

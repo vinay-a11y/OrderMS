@@ -83,7 +83,7 @@ export default function Dashboard() {
     async (silent = false) => {
       try {
         if (!silent) setIsLoading(true)
-        const response = await fetch("/api/admin/orders", {
+        const response = await fetch("http://localhost:8000/api/admin/orders", {
           credentials: "include",
         })
         if (response.ok) {
@@ -110,7 +110,7 @@ export default function Dashboard() {
   const loadProducts = useCallback(
     async (silent = false) => {
       try {
-        const response = await fetch("/api/products-state")
+        const response = await fetch("http://localhost:8000/api/products-state")
         if (response.ok) {
           const data = await response.json()
           setProducts(data)
@@ -336,7 +336,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">₹{stats.totalRevenue.toLocaleString()}</div>
-              <p className="text-xs opacity-90 flex items-center mt-1">
+              {/* <p className="text-xs opacity-90 flex items-center mt-1">
                 {growth.revenue >= 0 ? (
                   <TrendingUp className="h-3 w-3 mr-1" />
                 ) : (
@@ -344,7 +344,7 @@ export default function Dashboard() {
                 )}
                 {growth.revenue >= 0 ? "+" : ""}
                 {growth.revenue}% from last {timePeriod.slice(0, -2)}
-              </p>
+              </p> */}
             </CardContent>
           </Card>
 
@@ -355,9 +355,9 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.totalCustomers.toLocaleString()}</div>
-              <p className="text-xs opacity-90 flex items-center mt-1">
+              {/* <p className="text-xs opacity-90 flex items-center mt-1">
                 <TrendingUp className="h-3 w-3 mr-1" />+{growth.customers}% from last {timePeriod.slice(0, -2)}
-              </p>
+              </p> */}
             </CardContent>
           </Card>
 
@@ -368,7 +368,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.totalOrders.toLocaleString()}</div>
-              <p className="text-xs opacity-90 flex items-center mt-1">
+              {/* <p className="text-xs opacity-90 flex items-center mt-1">
                 {growth.orders >= 0 ? (
                   <TrendingUp className="h-3 w-3 mr-1" />
                 ) : (
@@ -376,7 +376,7 @@ export default function Dashboard() {
                 )}
                 {growth.orders >= 0 ? "+" : ""}
                 {growth.orders}% from last {timePeriod.slice(0, -2)}
-              </p>
+              </p> */}
             </CardContent>
           </Card>
 
@@ -387,7 +387,7 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{stats.activeProducts}</div>
-              <p className="text-xs opacity-90 flex items-center mt-1">
+              {/* <p className="text-xs opacity-90 flex items-center mt-1">
                 {growth.products >= 0 ? (
                   <TrendingUp className="h-3 w-3 mr-1" />
                 ) : (
@@ -395,7 +395,7 @@ export default function Dashboard() {
                 )}
                 {growth.products >= 0 ? "+" : ""}
                 {growth.products}% from last {timePeriod.slice(0, -2)}
-              </p>
+              </p> */}
             </CardContent>
           </Card>
         </div>

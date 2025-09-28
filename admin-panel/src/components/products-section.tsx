@@ -14,7 +14,8 @@ import type { Product } from "@/types/products"
 const CONFIG = {
   PRODUCTS_PER_PAGE: 20,
   SEARCH_DEBOUNCE_DELAY: 300,
-  PRODUCTS_API_URL: "/api/products-state",
+  PRODUCTS_API_URL: "http://localhost:8000/api/products-state",
+  TOGGLE_ALL_URL: "http://localhost:8000/api/products/toggle-all",
 }
 
 export function ProductsSection() {
@@ -31,40 +32,26 @@ export function ProductsSection() {
 
   const { toast } = useToast()
 
+  // Load products from backend
   const loadProducts = useCallback(
     async (silent = false) => {
       try {
-        console.log("Fetching products from:", CONFIG.PRODUCTS_API_URL)
         if (!silent) setIsLoading(true)
-
         const response = await fetch(CONFIG.PRODUCTS_API_URL)
-        console.log("Products response status:", response.status)
-
         if (!response.ok) throw new Error(`HTTP ${response.status}`)
-
         const data: Product[] = await response.json()
-        console.log("Products loaded:", data.length)
-
         const sortedData = data.sort((a, b) => a.item_name.localeCompare(b.item_name))
         setProducts(sortedData)
         setFilteredProducts(sortedData)
 
         if (!silent) {
-          toast({
-            title: "Success",
-            description: `Loaded ${sortedData.length} products successfully`,
-          })
+          toast({ title: "Success", description: `Loaded ${sortedData.length} products successfully` })
         }
       } catch (error) {
         console.error("Error loading products:", error)
         if (!silent) {
-          toast({
-            title: "Error",
-            description: "Failed to load products from backend",
-            variant: "destructive",
-          })
+          toast({ title: "Error", description: "Failed to load products from backend", variant: "destructive" })
         }
-        // Set empty array if backend fails
         setProducts([])
         setFilteredProducts([])
       } finally {
@@ -74,6 +61,7 @@ export function ProductsSection() {
     [toast],
   )
 
+  // Apply search, filter, sort
   const applyFiltersAndRender = useCallback(() => {
     let filtered = [...products]
 
@@ -112,10 +100,30 @@ export function ProductsSection() {
     setFilteredProducts(filtered)
   }, [products, categoryFilter, searchQuery, sortBy, sortOrder])
 
+  // Reload products silently
   const handleProductUpdate = useCallback(() => {
-    // Reload products without showing loading state
     loadProducts(true)
   }, [loadProducts])
+
+  // Toggle all products
+  const toggleAllProducts = async (action: "1" | "0") => {
+    const actionText = action === "1" ? "enable" : "disable"
+    if (!confirm(`Are you sure you want to ${actionText} all products?`)) return
+
+    try {
+      setIsLoading(true)
+      const response = await fetch(`${CONFIG.TOGGLE_ALL_URL}?action=${action}`, { method: "PATCH" })
+      if (!response.ok) throw new Error(`HTTP ${response.status}`)
+      const data = await response.json()
+      toast({ title: "Success", description: data.message })
+      loadProducts(true)
+    } catch (error) {
+      console.error("Error toggling all products:", error)
+      toast({ title: "Error", description: "Failed to toggle all products", variant: "destructive" })
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   const categories = [
     ...new Set(products.map((p) => p.category).filter((c): c is string => typeof c === "string")),
@@ -137,9 +145,7 @@ export function ProductsSection() {
   }, [applyFiltersAndRender])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setCurrentPage(1)
-    }, CONFIG.SEARCH_DEBOUNCE_DELAY)
+    const timer = setTimeout(() => setCurrentPage(1), CONFIG.SEARCH_DEBOUNCE_DELAY)
     return () => clearTimeout(timer)
   }, [searchQuery])
 
@@ -156,7 +162,9 @@ export function ProductsSection() {
                 </div>
                 Product Catalog
               </h1>
-              <p className="text-slate-600 text-sm">Manage your product catalog, pricing, and inventory efficiently</p>
+              <p className="text-slate-600 text-sm">
+                Manage your product catalog, pricing, and inventory efficiently
+              </p>
             </div>
 
             <div className="flex gap-4">
@@ -184,7 +192,7 @@ export function ProductsSection() {
       </header>
 
       {/* Main Content */}
-<div className="max-w-[1500px] mx-auto p-6">
+      <div className="max-w-[1500px] mx-auto p-6">
         {/* Controls */}
         <div className="flex justify-between items-center mb-6 gap-4 flex-wrap">
           {/* Search */}
@@ -206,8 +214,20 @@ export function ProductsSection() {
             )}
           </div>
 
-          {/* Filters */}
+          {/* Filters & Actions */}
           <div className="flex items-center gap-4">
+            {/* Toggle All Dropdown */}
+            <Select onValueChange={(value) => toggleAllProducts(value as "1" | "0")}>
+              <SelectTrigger className="w-48 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500">
+                <SelectValue placeholder="Toggle All Products" />
+              </SelectTrigger>
+              <SelectContent className="bg-white shadow-md">
+                <SelectItem value="1">Enable All Products</SelectItem>
+                <SelectItem value="0">Disable All Products</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Category Filter */}
             <Select value={categoryFilter} onValueChange={setCategoryFilter}>
               <SelectTrigger className="w-48 border-slate-300 focus:border-emerald-500 focus:ring-emerald-500">
                 <SelectValue placeholder="All Categories" />
@@ -222,6 +242,7 @@ export function ProductsSection() {
               </SelectContent>
             </Select>
 
+            {/* Sort */}
             <Select
               value={`${sortBy}-${sortOrder}`}
               onValueChange={(value) => {
@@ -242,6 +263,7 @@ export function ProductsSection() {
               </SelectContent>
             </Select>
 
+            {/* Refresh */}
             <Button
               variant="outline"
               onClick={() => loadProducts()}
@@ -252,6 +274,7 @@ export function ProductsSection() {
               Refresh
             </Button>
 
+            {/* Add Product */}
             <Button
               className="bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 shadow-lg"
               onClick={() => setShowAddModal(true)}
@@ -301,4 +324,3 @@ function StatCard({ label, value, icon: Icon, color }: { label: string; value: n
     </div>
   )
 }
-

@@ -179,6 +179,8 @@ class OrdersManager {
     const itemsPreview = order.items.slice(0, 4)
     const remainingItems = order.items.length - 4
 
+    const canCancel = !isRecent && ["placed", "confirmed"].includes(order.order_status)
+
     return `
       <div class="order-card" onclick="openOrderModal('${order.id}')">
         <div class="order-header">
@@ -229,11 +231,11 @@ class OrdersManager {
             View Details
           </button>
           ${
-            !isRecent && ["placed", "confirmed"].includes(order.order_status)
+            canCancel
               ? `
-                <button class="action-btn danger" onclick="openCancelModal('${order.id}')">
+                <button class="action-btn danger" onclick="openCancelModal('${order.id}')" title="Cancel this order">
                   <i class="fas fa-times"></i>
-                  Cancel
+                  Cancel Order
                 </button>
               `
               : ""
@@ -360,6 +362,15 @@ class OrdersManager {
         closeOrderModal()
       }
     })
+
+    const cancelModal = document.getElementById("cancelModal")
+    if (cancelModal) {
+      cancelModal.addEventListener("click", (e) => {
+        if (e.target.id === "cancelModal") {
+          closeCancelModal()
+        }
+      })
+    }
 
     // Search functionality
     const searchInput = document.getElementById("searchInput")
@@ -538,6 +549,8 @@ function openOrderModal(orderId) {
   const shipping = subtotal >= 500 ? 0 : 50
   const tax = subtotal * 0.18 // 18% GST
 
+  const canCancelInModal = ["placed", "confirmed"].includes(order.order_status)
+
   modalBody.innerHTML = `
     <div class="order-details">
       <!-- Order Information -->
@@ -650,9 +663,9 @@ function openOrderModal(orderId) {
         <h4><i class="fas fa-cogs"></i> Quick Actions</h4>
         <div class="order-actions">
           ${
-            ["placed", "confirmed"].includes(order.order_status)
+            canCancelInModal
               ? `
-                <button class="action-btn danger" onclick="openCancelModal('${order.id}'); closeOrderModal();">
+                <button class="action-btn danger" onclick="openCancelModal('${order.id}'); closeOrderModal();" title="Cancel this order">
                   <i class="fas fa-times"></i>
                   Cancel Order
                 </button>
@@ -704,10 +717,45 @@ function closeOrderModal() {
 }
 
 function openCancelModal(orderId) {
+  const order = ordersManager.getOrderById(orderId)
+  if (!order) {
+    ordersManager.showNotification("Order not found", "error")
+    return
+  }
+
+  if (!["placed", "confirmed"].includes(order.order_status)) {
+    ordersManager.showNotification(
+      `Cannot cancel an order that is ${order.order_status}. Only orders with 'placed' or 'confirmed' status can be cancelled.`,
+      "error",
+    )
+    return
+  }
+
   ordersManager.selectedOrderForCancel = orderId
   const modal = document.getElementById("cancelModal")
-  // Reset form
-  document.getElementById("cancelReason").value = ""
+
+  // Reset form and populate order details
+  const cancelReason = document.getElementById("cancelReason")
+  if (cancelReason) {
+    cancelReason.value = ""
+  }
+
+  // Update modal content with order details
+  const orderInfo = document.getElementById("cancelOrderInfo")
+  if (orderInfo) {
+    orderInfo.innerHTML = `
+      <div class="cancel-order-details">
+        <h4>Order #${order.razorpay_order_id}</h4>
+        <p>Status: <span class="status-badge ${order.order_status}">${order.order_status.toUpperCase()}</span></p>
+        <p>Total: ₹${order.total_amount.toFixed(2)}</p>
+        <p class="warning-text">
+          <i class="fas fa-exclamation-triangle"></i>
+          Are you sure you want to cancel this order? This action cannot be undone.
+        </p>
+      </div>
+    `
+  }
+
   modal.classList.add("active")
 }
 
@@ -718,14 +766,15 @@ function closeCancelModal() {
 }
 
 async function confirmCancelOrder() {
-  if (!ordersManager.selectedOrderForCancel) {
+  const orderId = ordersManager.selectedOrderForCancel
+  if (!orderId) {
     ordersManager.showNotification("No order selected for cancellation", "error")
     return
   }
 
-  const reason = document.getElementById("cancelReason").value
-  if (!reason) {
-    ordersManager.showNotification("Please select a reason for cancellation", "error")
+  const order = ordersManager.getOrderById(orderId)
+  if (!order) {
+    ordersManager.showNotification("Order not found", "error")
     return
   }
 
@@ -733,53 +782,46 @@ async function confirmCancelOrder() {
   const originalText = confirmBtn.innerHTML
 
   try {
-    // Show loading state
     confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Cancelling...'
     confirmBtn.disabled = true
 
-    // API call to cancel order
-    const response = await fetch(`/api/orders/${ordersManager.selectedOrderForCancel}/cancel`, {
-      method: "POST",
+    // ✅ Directly call backend PATCH endpoint
+    const response = await fetch(`/cancel-order/${orderId}`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
       },
-      body: JSON.stringify({
-        reason: reason,
-        user_id: ordersManager.userDetails.id,
-      }),
     })
 
-    if (response.ok) {
-      // Update local order status
-      const order = ordersManager.orders.find((o) => o.id == ordersManager.selectedOrderForCancel)
-      if (order) {
-        order.order_status = "cancelled"
-        order.payment_status = "refunded"
-        order.updated_at = new Date().toISOString()
-        order.notes = `Cancelled: ${reason}`
-      }
-
-      ordersManager.showNotification(
-        "Order cancelled successfully. Refund will be processed within 3-5 business days.",
-        "success",
-      )
-    } else {
-      throw new Error("Failed to cancel order")
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.detail || "Failed to cancel order")
     }
+
+    const result = await response.json()
+    console.log("Order cancelled successfully:", result)
+
+    // ✅ Update local order state after backend confirms
+    order.order_status = "cancelled"
+    order.updated_at = new Date().toISOString()
+    order.estimatedTime = "Cancelled"
+    order.progress = 0
+
+    ordersManager.showNotification(result.message || "Order cancelled successfully!", "success")
   } catch (error) {
     console.error("Error cancelling order:", error)
-    ordersManager.showNotification("Failed to cancel order. Please try again or contact support.", "error")
-    // Reset button
+    ordersManager.showNotification(
+      error.message || "Failed to cancel order. Please try again later.",
+      "error"
+    )
+  } finally {
     confirmBtn.innerHTML = originalText
     confirmBtn.disabled = false
-    return
+    closeCancelModal()
+    ordersManager.categorizeOrders()
+    ordersManager.renderOrders()
   }
-
-  // Close modal and refresh orders
-  closeCancelModal()
-  ordersManager.categorizeOrders()
-  ordersManager.renderOrders()
 }
 
 function reorderItems(orderId) {
@@ -1273,4 +1315,3 @@ function confirmLogout() {
 document.addEventListener("DOMContentLoaded", () => {
   ordersManager = new OrdersManager()
 })
-

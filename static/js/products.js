@@ -216,13 +216,12 @@ function updateWelcomeMessage() {
   // Welcome message now only shows "Welcome to Gokhale Bandu" without username
 }
 
-// Fetch and render products from API only
 async function fetchAndRenderProducts() {
   try {
     console.log("Fetching products from API...")
     showLoadingState()
 
-    const response = await fetch("/api/products", {
+    const response = await fetch("/api/products-state", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -241,7 +240,6 @@ async function fetchAndRenderProducts() {
       throw new Error("No products found")
     }
 
-    // Process products to ensure proper structure
     const processedProducts = products
       .map((product) => {
         if (!product.id || !product.item_name || !product.variants || product.variants.length === 0) {
@@ -256,6 +254,7 @@ async function fetchAndRenderProducts() {
           category: product.category || "snacks",
           image_url: product.image_url || product.image || "/placeholder.svg?height=200&width=300",
           variants: product.variants || [],
+          is_enabled: product.is_enabled || false, // Include is_enabled status
         }
 
         // Sort variants by price (highest first)
@@ -273,6 +272,13 @@ async function fetchAndRenderProducts() {
       throw new Error("No valid products found")
     }
 
+    const enabledProducts = processedProducts.filter((product) => product.is_enabled)
+
+    if (enabledProducts.length === 0) {
+      showOutOfStockMessage()
+      return
+    }
+
     window.allProducts = processedProducts
     window.filteredProducts = processedProducts
 
@@ -281,7 +287,67 @@ async function fetchAndRenderProducts() {
     updateProductCount()
   } catch (error) {
     console.error("Error fetching products:", error)
-    showError("Failed to load products. Please check your connection and try again.")
+    showError("Out of stock – please check back in a few days")
+  }
+}
+
+function showOutOfStockMessage() {
+  const productsContainer = document.getElementById("productsContainer")
+  if (productsContainer) {
+    productsContainer.innerHTML = `
+      <div class="out-of-stock-message" style="
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 4rem 2rem;
+        text-align: center;
+        min-height: 400px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        border-radius: 20px;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      ">
+        <div style="
+          font-size: 4rem;
+          margin-bottom: 1rem;
+          animation: bounce 2s infinite;
+        ">😔</div>
+        <h2 style="
+          color: #333;
+          font-size: 2rem;
+          margin-bottom: 1rem;
+          font-weight: 600;
+        ">We are out of stock</h2>
+        <p style="
+          color: #666;
+          font-size: 1.1rem;
+          max-width: 400px;
+          line-height: 1.6;
+        ">All our delicious products are currently unavailable. Please check back soon for fresh stock!</p>
+        <button onclick="fetchAndRenderProducts()" style="
+          margin-top: 2rem;
+          padding: 1rem 2rem;
+          background: linear-gradient(135deg, #667eea, #764ba2);
+          color: white;
+          border: none;
+          border-radius: 50px;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 1rem;
+          transition: transform 0.2s ease;
+        " onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+          <i class="fas fa-redo"></i> Refresh
+        </button>
+      </div>
+      <style>
+        @keyframes bounce {
+          0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+          40% { transform: translateY(-10px); }
+          60% { transform: translateY(-5px); }
+        }
+      </style>
+    `
   }
 }
 
@@ -306,13 +372,12 @@ function renderProducts(products) {
   }
 }
 
-// Render mobile products
 function renderMobileProducts(products) {
   const productsContainer = document.getElementById("productsContainer")
 
   products.forEach((product, index) => {
     const card = document.createElement("div")
-    card.className = "product-card"
+    card.className = `product-card ${!product.is_enabled ? "disabled-product" : ""}`
     card.setAttribute("data-category", product.category || "uncategorized")
     card.setAttribute("data-product-id", product.id)
     card.style.animationDelay = `${index * 0.1}s`
@@ -323,16 +388,52 @@ function renderMobileProducts(products) {
     const originalPrice = maxVariant.price + Math.round(maxVariant.price * 0.2)
     const discountPercent = Math.round(((originalPrice - maxVariant.price) / originalPrice) * 100)
 
+    const disabledStyle = !product.is_enabled
+      ? `
+      opacity: 0.6;
+      filter: grayscale(50%);
+      position: relative;
+    `
+      : ""
+
+    const disabledOverlay = !product.is_enabled
+      ? `
+      <div class="disabled-overlay" style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        z-index: 2;
+      ">
+        <span style="
+          background: #ff4757;
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-weight: 600;
+          font-size: 0.9rem;
+        ">Out of Stock</span>
+      </div>
+    `
+      : ""
+
     card.innerHTML = `
-      <div class="product-row">
-        <div class="product-image" onclick="goToProductDetails(${product.id})">
+      <div class="product-row" style="${disabledStyle}">
+        ${disabledOverlay}
+        <div class="product-image" onclick="${product.is_enabled ? `goToProductDetails(${product.id})` : "return false;"}">
           <img src="${product.image_url}"
                alt="${product.item_name}"
                loading="lazy"
                onerror="this.src='/placeholder.svg?height=110&width=130';" />
         </div>
         <div class="product-details">
-          <h3 class="product-name" onclick="goToProductDetails(${product.id})">${product.item_name}</h3>
+          <h3 class="product-name" onclick="${product.is_enabled ? `goToProductDetails(${product.id})` : "return false;"}">${product.item_name}</h3>
           
           <div class="price-info-line">
             <span>Gokhale's MRP</span>
@@ -352,7 +453,9 @@ function renderMobileProducts(products) {
       
       <div class="product-bottom">
         <div class="variant-left">
-          <select class="variants-dropdown" id="variant-${product.id}" onchange="updateProductPrice(${product.id}, this.value, this.options[this.selectedIndex].text)">
+          <select class="variants-dropdown" id="variant-${product.id}" 
+                  ${!product.is_enabled ? "disabled" : ""} 
+                  onchange="updateProductPrice(${product.id}, this.value, this.options[this.selectedIndex].text)">
             ${product.variants
               .map(
                 (variant, i) => `
@@ -364,9 +467,12 @@ function renderMobileProducts(products) {
               .join("")}
           </select>
         </div>
-        <button class="add-to-cart" onclick="addToCart(${product.id})">
+        <button class="add-to-cart" 
+                ${!product.is_enabled ? "disabled" : ""} 
+                onclick="${product.is_enabled ? `addToCart(${product.id})` : 'showToast("This product is currently out of stock", "error")'}"
+                style="${!product.is_enabled ? "background: #ccc; cursor: not-allowed;" : ""}">
           <i class="fas fa-shopping-cart"></i>
-          Add
+          ${product.is_enabled ? "Add" : "Unavailable"}
         </button>
       </div>
     `
@@ -375,7 +481,6 @@ function renderMobileProducts(products) {
   })
 }
 
-// Render desktop products (with pagination)
 function renderDesktopProducts(products) {
   const productsContainer = document.getElementById("productsContainer")
 
@@ -386,7 +491,7 @@ function renderDesktopProducts(products) {
 
   currentProducts.forEach((product, index) => {
     const card = document.createElement("div")
-    card.className = "product-card"
+    card.className = `product-card ${!product.is_enabled ? "disabled-product" : ""}`
     card.setAttribute("data-category", product.category || "uncategorized")
     card.setAttribute("data-product-id", product.id)
     card.style.animationDelay = `${index * 0.1}s`
@@ -397,42 +502,86 @@ function renderDesktopProducts(products) {
     const originalPrice = maxVariant.price + Math.round(maxVariant.price * 0.2)
     const discountPercent = Math.round(((originalPrice - maxVariant.price) / originalPrice) * 100)
 
-    card.innerHTML = `
-      <div class="product-image" onclick="goToProductDetails(${product.id})">
-        <img src="${product.image_url}"
-             alt="${product.item_name}"
-             loading="lazy"
-             onerror="this.src='/placeholder.svg?height=220&width=320';" />
+    const disabledStyle = !product.is_enabled
+      ? `
+      opacity: 0.6;
+      filter: grayscale(50%);
+      position: relative;
+    `
+      : ""
+
+    const disabledOverlay = !product.is_enabled
+      ? `
+      <div class="disabled-overlay" style="
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(255,255,255,0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        z-index: 2;
+      ">
+        <span style="
+          background: #ff4757;
+          color: white;
+          padding: 0.5rem 1rem;
+          border-radius: 20px;
+          font-weight: 600;
+          font-size: 0.9rem;
+        ">Out of Stock</span>
       </div>
-      <div class="product-info">
-        <h3 onclick="goToProductDetails(${product.id})">${product.item_name}</h3>
-        
-        <p class="product-description" onclick="goToProductDetails(${product.id})">${product.description}</p>
-        
-        <div class="product-price-container">
-          <div class="product-pricing">
-            <div class="product-price" id="price-${product.id}">₹${maxVariant.price.toFixed(2)}</div>
-            <div class="original-price">₹${originalPrice.toFixed(2)}</div>
-            <div class="discount-badge">${discountPercent}% OFF</div>
-          </div>
-          <div class="price-info">Starting from ₹${minVariant.price.toFixed(2)} </div>
+    `
+      : ""
+
+    card.innerHTML = `
+      <div style="${disabledStyle}">
+        ${disabledOverlay}
+        <div class="product-image" onclick="${product.is_enabled ? `goToProductDetails(${product.id})` : "return false;"}">
+          <img src="${product.image_url}"
+               alt="${product.item_name}"
+               loading="lazy"
+               onerror="this.src='/placeholder.svg?height=220&width=320';" />
         </div>
-        
-        <div class="product-actions">
-          <select class="variants-dropdown" id="variant-${product.id}" onchange="updateProductPrice(${product.id}, this.value, this.options[this.selectedIndex].text)">
-            ${product.variants
-              .map(
-                (variant, i) => `
-                <option value="${variant.price}" ${i === 0 ? "selected" : ""}>
-                  ${variant.packing} - ₹${variant.price.toFixed(2)}
-                </option>
-              `,
-              )
-              .join("")}
-          </select>
-          <button class="add-to-cart" onclick="addToCart(${product.id})" title="Add to Cart">
-            <i class="fas fa-shopping-cart"></i>
-          </button>
+        <div class="product-info">
+          <h3 onclick="${product.is_enabled ? `goToProductDetails(${product.id})` : "return false;"}">${product.item_name}</h3>
+          
+          <p class="product-description" onclick="${product.is_enabled ? `goToProductDetails(${product.id})` : "return false;"}">${product.description}</p>
+          
+          <div class="product-price-container">
+            <div class="product-pricing">
+              <div class="product-price" id="price-${product.id}">₹${maxVariant.price.toFixed(2)}</div>
+              <div class="original-price">₹${originalPrice.toFixed(2)}</div>
+              <div class="discount-badge">${discountPercent}% OFF</div>
+            </div>
+            <div class="price-info">Starting from ₹${minVariant.price.toFixed(2)} </div>
+          </div>
+          
+          <div class="product-actions">
+            <select class="variants-dropdown" id="variant-${product.id}" 
+                    ${!product.is_enabled ? "disabled" : ""} 
+                    onchange="updateProductPrice(${product.id}, this.value, this.options[this.selectedIndex].text)">
+              ${product.variants
+                .map(
+                  (variant, i) => `
+                  <option value="${variant.price}" ${i === 0 ? "selected" : ""}>
+                    ${variant.packing} - ₹${variant.price.toFixed(2)}
+                  </option>
+                `,
+                )
+                .join("")}
+            </select>
+            <button class="add-to-cart" 
+                    ${!product.is_enabled ? "disabled" : ""} 
+                    onclick="${product.is_enabled ? `addToCart(${product.id})` : 'showToast("This product is currently out of stock", "error")'}" 
+                    title="${product.is_enabled ? "Add to Cart" : "Out of Stock"}"
+                    style="${!product.is_enabled ? "background: #ccc; cursor: not-allowed;" : ""}">
+              <i class="fas fa-shopping-cart"></i>
+            </button>
+          </div>
         </div>
       </div>
     `
@@ -804,7 +953,6 @@ function updateActiveFilterButton(category) {
   })
 }
 
-// Add to cart with enhanced integration
 async function addToCart(productId) {
   const button = document.querySelector(`button[onclick*="addToCart(${productId})"]`)
   if (button) {
@@ -815,16 +963,21 @@ async function addToCart(productId) {
   try {
     const cart = JSON.parse(localStorage.getItem("cart")) || []
 
+    const product = window.allProducts.find((p) => p.id === Number.parseInt(productId))
+    if (!product) {
+      throw new Error("Product not found")
+    }
+
+    if (!product.is_enabled) {
+      showToast("This product is currently out of stock", "error")
+      return
+    }
+
     const variantDropdown = document.getElementById(`variant-${productId}`)
     const selectedPrice = variantDropdown ? Number.parseFloat(variantDropdown.value) : null
     const selectedVariant = variantDropdown
       ? variantDropdown.options[variantDropdown.selectedIndex].text.split(" - ")[0]
       : null
-
-    const product = window.allProducts.find((p) => p.id === Number.parseInt(productId))
-    if (!product) {
-      throw new Error("Product not found")
-    }
 
     const finalPrice = selectedPrice || product.variants[0].price
     const finalVariant = selectedVariant || product.variants[0].packing
@@ -1200,34 +1353,34 @@ async function showAddressSelectionModal() {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
       },
-    });
+    })
 
     if (response.ok) {
-      const data = await response.json();
-      savedAddresses = data.addresses || [];
+      const data = await response.json()
+      savedAddresses = data.addresses || []
 
-      const storedId = parseInt(localStorage.getItem("selectedAddressId"));
+      const storedId = Number.parseInt(localStorage.getItem("selectedAddressId"))
       if (storedId) {
-        selectedAddress = savedAddresses.find(addr => addr.id === storedId) || null;
+        selectedAddress = savedAddresses.find((addr) => addr.id === storedId) || null
       }
 
-      renderAddressSelectionModal(); // ✅ use separate renderer
+      renderAddressSelectionModal() // ✅ use separate renderer
     } else {
-      throw new Error("Failed to fetch saved addresses");
+      throw new Error("Failed to fetch saved addresses")
     }
   } catch (err) {
-    console.error("Error fetching addresses:", err);
-    showToast("Unable to fetch saved addresses", "error");
+    console.error("Error fetching addresses:", err)
+    showToast("Unable to fetch saved addresses", "error")
   }
 }
 
 function renderAddressSelectionModal() {
-  const modal = document.createElement("div");
-  modal.id = "addressSelectionModal";
-  modal.className = "address-selection-modal";
+  const modal = document.createElement("div")
+  modal.id = "addressSelectionModal"
+  modal.className = "address-selection-modal"
 
-  const hasAddresses = savedAddresses.length > 0;
-  const showFullForm = !hasAddresses;
+  const hasAddresses = savedAddresses.length > 0
+  const showFullForm = !hasAddresses
 
   modal.innerHTML = `
     <div class="address-modal-content">
@@ -1239,11 +1392,15 @@ function renderAddressSelectionModal() {
       </div>
 
       <div class="address-modal-body">
-        ${hasAddresses ? `
+        ${
+          hasAddresses
+            ? `
           <div class="saved-addresses-section">
             <h4>Saved Addresses</h4>
             <div class="saved-addresses-list">
-              ${savedAddresses.map((address, index) => `
+              ${savedAddresses
+                .map(
+                  (address, index) => `
                 <div class="address-option ${selectedAddress && selectedAddress.id === address.id ? "selected" : ""}"
                      onclick="selectAddressAndContinue(${index})">
                   <div class="address-content">
@@ -1256,12 +1413,16 @@ function renderAddressSelectionModal() {
                       ${address.line2 ? `<p>${address.line2}</p>` : ""}
                       <p>${address.city}, ${address.state} - ${address.pincode}</p>
                     </div>
-                    ${selectedAddress && selectedAddress.id === address.id ? `
+                    ${
+                      selectedAddress && selectedAddress.id === address.id
+                        ? `
                       <div class="selected-badge">
                         <i class="fas fa-check-circle"></i>
                         <span>Selected</span>
                       </div>
-                    ` : ""}
+                    `
+                        : ""
+                    }
                   </div>
                   <div class="address-actions">
                     <button class="delete-address-btn" onclick="event.stopPropagation(); deleteAddress(${index});">
@@ -1269,21 +1430,29 @@ function renderAddressSelectionModal() {
                     </button>
                   </div>
                 </div>
-              `).join("")}
+              `,
+                )
+                .join("")}
             </div>
           </div>
           <div class="address-divider"><span>OR</span></div>
-        ` : ""}
+        `
+            : ""
+        }
 
-        <!-- Add Address Section -->
+         Add Address Section 
         <div class="add-address-section">
           <h4>Add New Address</h4>
 
-          ${hasAddresses ? `
+          ${
+            hasAddresses
+              ? `
             <button class="toggle-add-address-btn" onclick="toggleAddAddressForm()">
               <i class="fas fa-plus"></i> Add Address
             </button>
-          ` : ""}
+          `
+              : ""
+          }
 
           <div class="address-form" id="addressForm" style="display: ${showFullForm ? "block" : "none"};">
             <div class="form-group">
@@ -1325,31 +1494,35 @@ function renderAddressSelectionModal() {
         </div>
       </div>
 
-      ${selectedAddress ? `
+      ${
+        selectedAddress
+          ? `
         <div class="address-modal-footer">
           <button class="continue-checkout-btn" onclick="continueToPayment()">
             <i class="fas fa-credit-card"></i> Continue to Payment
           </button>
         </div>
-      ` : ""}
+      `
+          : ""
+      }
     </div>
-  `;
+  `
 
-  document.body.appendChild(modal);
-  document.body.classList.add("modal-open");
+  document.body.appendChild(modal)
+  document.body.classList.add("modal-open")
 }
 
 // Toggle form show/hide
 function toggleAddAddressForm() {
-  const form = document.getElementById("addressForm");
-  form.style.display = form.style.display === "none" ? "block" : "none";
+  const form = document.getElementById("addressForm")
+  form.style.display = form.style.display === "none" ? "block" : "none"
 }
 async function deleteAddress(index) {
-  const addressToDelete = savedAddresses[index];
-  if (!addressToDelete) return;
+  const addressToDelete = savedAddresses[index]
+  if (!addressToDelete) return
 
-  const confirmDelete = confirm("Are you sure you want to delete this address?");
-  if (!confirmDelete) return;
+  const confirmDelete = confirm("Are you sure you want to delete this address?")
+  if (!confirmDelete) return
 
   try {
     const response = await fetch(`/api/user/address?address_id=${addressToDelete.id}&user_id=${userDetails.id}`, {
@@ -1358,32 +1531,31 @@ async function deleteAddress(index) {
         "Content-Type": "application/json",
         Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
       },
-    });
+    })
 
     if (response.ok) {
-      showToast("Address deleted successfully", "success");
+      showToast("Address deleted successfully", "success")
 
       // Remove from frontend list
-      savedAddresses.splice(index, 1);
+      savedAddresses.splice(index, 1)
       if (selectedAddress && selectedAddress.id === addressToDelete.id) {
-        selectedAddress = null;
-        localStorage.removeItem("selectedAddressId");
+        selectedAddress = null
+        localStorage.removeItem("selectedAddressId")
       }
 
       // Re-render modal
-      closeAddressSelectionModal();
-      renderAddressSelectionModal();
+      closeAddressSelectionModal()
+      renderAddressSelectionModal()
     } else {
-      const data = await response.json();
-      console.error("Failed to delete address:", data);
-      showToast(data.detail || "Failed to delete address", "error");
+      const data = await response.json()
+      console.error("Failed to delete address:", data)
+      showToast(data.detail || "Failed to delete address", "error")
     }
   } catch (err) {
-    console.error("Error deleting address:", err);
-    showToast("Error deleting address", "error");
+    console.error("Error deleting address:", err)
+    showToast("Error deleting address", "error")
   }
 }
-
 
 // Close address selection modal
 function closeAddressSelectionModal() {
@@ -1391,30 +1563,6 @@ function closeAddressSelectionModal() {
   if (modal) {
     modal.remove()
     document.body.classList.remove("modal-open")
-  }
-}
-async function showAddressSelectionModal() {
-  try {
-    // Fetch addresses from backend
-    const response = await fetch(`/api/user/addresses?id=${userDetails.id}`, {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-      },
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      savedAddresses = data.addresses || [];
-
-      // Then render the modal with updated addresses
-      renderAddressSelectionModal(); // move your existing modal rendering logic to a new function
-    } else {
-      throw new Error("Failed to fetch saved addresses");
-    }
-  } catch (err) {
-    console.error("Error fetching addresses:", err);
-    showToast("Unable to fetch saved addresses", "error");
   }
 }
 
@@ -1492,14 +1640,14 @@ async function addAddressAndContinue() {
   const newAddress = {
     id: userDetails.id,
     address: {
-      id: Date.now(),  // or use a better unique generator if needed
+      id: Date.now(), // or use a better unique generator if needed
       line1,
       line2,
       city,
       state,
       pincode,
-      type
-    }
+      type,
+    },
   }
 
   try {
@@ -1514,7 +1662,7 @@ async function addAddressAndContinue() {
 
     if (response.ok) {
       const data = await response.json()
-      const savedAddress = data.addresses?.slice(-1)[0]  // get the last added address
+      const savedAddress = data.addresses?.slice(-1)[0] // get the last added address
       savedAddresses.push(savedAddress)
       selectedAddress = savedAddress
       localStorage.setItem("selectedAddressId", selectedAddress.id)
@@ -1533,10 +1681,9 @@ async function addAddressAndContinue() {
     }
   } catch (error) {
     console.error("Error saving address:", error)
-    showToast("Error saving address", "erro r")
+    showToast("Error saving address", "error")
   }
 }
-
 
 // Continue to payment
 function continueToPayment() {
@@ -1571,31 +1718,31 @@ async function proceedToCheckout() {
 
 // Initiate Razorpay payment process
 async function initiatePayment() {
-  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+  const cart = JSON.parse(localStorage.getItem("cart")) || []
 
   if (!selectedAddress) {
-    showToast("Please select a delivery address first", "error");
-    showAddressSelectionModal();
-    return;
+    showToast("Please select a delivery address first", "error")
+    showAddressSelectionModal()
+    return
   }
 
   if (!userDetails.id) {
-    showToast("Please login to proceed with payment", "error");
+    showToast("Please login to proceed with payment", "error")
     setTimeout(() => {
-      window.location.href = "/login";
-    }, 2000);
-    return;
+      window.location.href = "/login"
+    }, 2000)
+    return
   }
 
   // Show loading state
-  const checkoutBtn = document.querySelector(".continue-checkout-btn") || document.querySelector(".checkout-btn");
-  const originalText = checkoutBtn.innerHTML;
-  checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
-  checkoutBtn.disabled = true;
+  const checkoutBtn = document.querySelector(".continue-checkout-btn") || document.querySelector(".checkout-btn")
+  const originalText = checkoutBtn.innerHTML
+  checkoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...'
+  checkoutBtn.disabled = true
 
-  const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const shipping = totalAmount >= 500 ? 0 : 50;
-  const finalAmount = totalAmount + shipping;
+  const totalAmount = cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+  const shipping = totalAmount >= 500 ? 0 : 50
+  const finalAmount = totalAmount + shipping
 
   try {
     // ✅ Create order on backend
@@ -1608,14 +1755,14 @@ async function initiatePayment() {
       body: JSON.stringify({
         amount: finalAmount,
       }),
-    });
+    })
 
     if (!orderResponse.ok) {
-      throw new Error("Failed to create order");
+      throw new Error("Failed to create order")
     }
 
-    const orderData = await orderResponse.json();
-    const { order_id, key: razorpay_key } = orderData;
+    const orderData = await orderResponse.json()
+    const { order_id, key: razorpay_key } = orderData
 
     // Initialize Razorpay
     const options = {
@@ -1643,31 +1790,31 @@ async function initiatePayment() {
               items: cart,
               amount: finalAmount,
             }),
-          });
+          })
 
           if (verifyResponse.ok) {
-            showToast("Payment successful! Order placed.", "success");
+            showToast("Payment successful! Order placed.", "success")
 
             // Clear cart
-            localStorage.setItem("cart", JSON.stringify([]));
+            localStorage.setItem("cart", JSON.stringify([]))
 
             // Update UI
-            updateCartCount();
-            syncCartCounts();
-            updateCartDisplay();
+            updateCartCount()
+            syncCartCounts()
+            updateCartDisplay()
 
-            const result = await verifyResponse.json();
+            const result = await verifyResponse.json()
 
             setTimeout(() => {
-              showToast("Redirecting to orders page...", "info");
-              window.location.href = `/orders.html?order_id=${result.order_id}`;
-            }, 2000);
+              showToast("Redirecting to orders page...", "info")
+              window.location.href = `/orders.html?order_id=${result.order_id}`
+            }, 2000)
           } else {
-            throw new Error("Payment verification failed");
+            throw new Error("Payment verification failed")
           }
         } catch (error) {
-          console.error("Payment verification error:", error);
-          showToast("Payment verification failed. Please contact support.", "error");
+          console.error("Payment verification error:", error)
+          showToast("Payment verification failed. Please contact support.", "error")
         }
       },
       prefill: {
@@ -1684,22 +1831,22 @@ async function initiatePayment() {
       },
       modal: {
         ondismiss: () => {
-          showToast("Payment cancelled", "info");
-          checkoutBtn.innerHTML = originalText;
-          checkoutBtn.disabled = false;
+          showToast("Payment cancelled", "info")
+          checkoutBtn.innerHTML = originalText
+          checkoutBtn.disabled = false
         },
       },
-    };
+    }
 
-    const rzp = new window.Razorpay(options);
-    rzp.open();
+    const rzp = new window.Razorpay(options)
+    rzp.open()
   } catch (error) {
-    console.error("Payment initiation error:", error);
-    showToast("Error initiating payment: " + error.message, "error");
+    console.error("Payment initiation error:", error)
+    showToast("Error initiating payment: " + error.message, "error")
   } finally {
     if (checkoutBtn) {
-      checkoutBtn.innerHTML = originalText;
-      checkoutBtn.disabled = false;
+      checkoutBtn.innerHTML = originalText
+      checkoutBtn.disabled = false
     }
   }
 }

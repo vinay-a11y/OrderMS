@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from app.database.session import get_db
 from app.models.product import Product
 from app.schemas.product import ProductsCreate, ProductCreate
+from typing import Literal  # Add this line
+
 import traceback
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
@@ -234,3 +236,26 @@ def toggle_product_status(product_id: int, db: Session = Depends(get_db)):
         "new_status": product.is_enabled
     }
 
+@router.patch("/api/products/toggle-all")
+def toggle_all_products(
+    action: Literal["0", "1"],
+    db: Session = Depends(get_db)
+):
+    """
+    Enable or disable all products at once.
+
+    action: "1" or "0"
+    """
+    products = db.query(Product).all()
+    if not products:
+        return {"message": "No products found."}
+
+    is_enable = True if action == "1" else False
+    for product in products:
+        product.is_enabled = is_enable
+
+    db.commit()
+    return {
+        "message": f"All products have been {action}d successfully.",
+        "affected_count": len(products)
+    }

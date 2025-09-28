@@ -38,7 +38,7 @@ export function LoginForm({ onLoginSuccess, onBack }: LoginFormProps) {
     setError("")
 
     try {
-      const response = await fetch("/api/admins_ops/login", {
+      const response = await fetch("http://localhost:8000/api/admins_ops/login", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({ email, password }),
@@ -78,7 +78,7 @@ export function LoginForm({ onLoginSuccess, onBack }: LoginFormProps) {
     }
 
     try {
-      const response = await fetch("/api/admins_ops/change-password", {
+      const response = await fetch("http://localhost:8000/api/admins_ops/change-password", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: new URLSearchParams({
